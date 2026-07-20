@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SCAFFOLD: remove this noindex line when the page is ready to launch. -->
+<meta name="robots" content="noindex">
+<title>Peel: a macOS workspace for AI coding agents</title>
+<meta name="description" content="Peel keeps AI coding work attached to the repo it belongs to. Runs happen in isolated worktrees, and you review the diff before anything lands.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #16181d;
+    --muted: #61656e;
+    --line: #e4e6ea;
+    --card: #fafbfc;
+    --accent: #1c6dd8;
+    --accent-fg: #ffffff;
+    --slot: #f1f3f6;
+    --radius: 12px;
+    --maxw: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1114;
+      --fg: #e9ebee;
+      --muted: #9aa0aa;
+      --line: #262a31;
+      --card: #14171b;
+      --accent: #5a9dff;
+      --accent-fg: #0f1114;
+      --slot: #1a1e24;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); }
+
+  header.site { border-bottom: 1px solid var(--line); }
+  header.site .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; padding-top: 18px; padding-bottom: 18px; flex-wrap: wrap;
+  }
+  .brand { font-weight: 650; letter-spacing: -0.01em; font-size: 17px; }
+  nav.site a { color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 15px; }
+  nav.site a:hover { color: var(--fg); }
+
+  .hero { padding: 88px 0 72px; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 20px;
+  }
+  h1 {
+    font-size: clamp(34px, 6vw, 58px); line-height: 1.06;
+    letter-spacing: -0.03em; font-weight: 680; margin: 0 0 22px; max-width: 15ch;
+  }
+  .lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 62ch; margin: 0 0 34px; }
+
+  .btn {
+    display: inline-block; padding: 11px 20px; border-radius: 9px;
+    text-decoration: none; font-weight: 560; font-size: 15px;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-fg); }
+  .btn-secondary { border-color: var(--line); color: var(--fg); margin-left: 10px; }
+  .req { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: clamp(24px, 3.4vw, 32px); letter-spacing: -0.02em; margin: 0 0 12px; font-weight: 650; }
+  .section-lede { color: var(--muted); max-width: 60ch; margin: 0 0 36px; }
+
+  /* Screenshot slots. Replaced with real captures once the demo profile exists. */
+  .shot {
+    background: var(--slot); border: 1px dashed var(--line); border-radius: var(--radius);
+    aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 24px; color: var(--muted); font-size: 14px;
+  }
+  .shot code { font-size: 13px; }
+
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 620; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .num { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; display: block; margin-bottom: 10px; }
+
+  .two { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  th { font-weight: 600; font-size: 13px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
+
+  footer.site { border-top: 1px solid var(--line); padding: 40px 0 56px; color: var(--muted); font-size: 14px; }
+  footer.site a { color: var(--muted); }
+  .footlinks { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <span class="brand">Peel</span>
+    <nav class="site">
+      <a href="#what">What it does</a>
+      <a href="#connect">Connect</a>
+      <a href="#swarm">Swarms</a>
+      <a href="https://github.com/cloke/peel-releases/blob/main/FEATURES.md">Features</a>
+      <a href="https://github.com/cloke/peel-releases/releases/latest">Download</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">Peel back the layers of your development environment</p>
+    <h1>A macOS workspace for AI coding agents.</h1>
+    <p class="lede">
+      We built Peel so AI coding work stays attached to the repo it belongs to. Agent runs happen
+      in isolated worktrees. You watch them work, then review the diff before anything lands.
+    </p>
+    <a class="btn btn-primary" href="https://github.com/cloke/peel-releases/releases/latest">Download for macOS</a>
+    <a class="btn btn-secondary" href="https://github.com/cloke/peel-releases/blob/main/FEATURES.md">Explore every feature</a>
+    <p class="req">Requires macOS 26 (Tahoe). Apple Silicon.</p>
+  </div>
+
+  <div class="shot">
+    <div>
+      <strong>Screenshot slot: Home</strong><br>
+      Waiting on the clean demo profile.<br>
+      <code>docs/assets/screenshots/home.png</code>
+    </div>
+  </div>
+
+</div>
+
+<section id="what">
+  <div class="wrap">
+    <h2>What Peel helps you do</h2>
+    <p class="section-lede">
+      The repo stays at the center. Everything else hangs off the code it's meant to improve.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <span class="num">01</span>
+        <h3>Understand a repository</h3>
+        <p>Search your code by meaning instead of filename. Indexing happens locally, so nothing leaves the machine.</p>
+      </div>
+      <div class="card">
+        <span class="num">02</span>
+        <h3>Run agent workflows safely</h3>
+        <p>Every run gets its own git worktree. You see the plan, the diff, and the checks before deciding what merges.</p>
+      </div>
+      <div class="card">
+        <span class="num">03</span>
+        <h3>Keep one attention queue</h3>
+        <p>The Inbox collects whatever needs you. Finished runs, failures, and PRs waiting on review all land in one place.</p>
+      </div>
+      <div class="card">
+        <span class="num">04</span>
+        <h3>Automate recurring work</h3>
+        <p>Save a workflow as a template, then put it on a schedule. Patrols keep working in the background.</p>
+      </div>
+      <div class="card">
+        <span class="num">05</span>
+        <h3>Use hardware you already own</h3>
+        <p>Got a second Mac sitting idle? Peel routes work to it, including local model inference.</p>
+      </div>
+      <div class="card">
+        <span class="num">06</span>
+        <h3>Connect the agents you use</h3>
+        <p>Peel speaks MCP and the OpenAI API, so your existing tools can talk to it without changing how you work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="connect">
+  <div class="wrap">
+    <h2>Point your agents at Peel</h2>
+    <p class="section-lede">
+      Peel runs a local server that speaks two protocols. Which one you want depends on whether
+      you're after the tools or the models.
+    </p>
+    <div class="two">
+      <div class="card">
+        <h3>Tools, over MCP</h3>
+        <p>
+          Point Claude Code or Cursor at the local endpoint. Peel's repository and git tooling
+          shows up inside the client you already use.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Models, over the OpenAI API</h3>
+        <p>
+          Peel also serves models on an OpenAI-compatible endpoint. One base URL gets any OpenAI
+          client whatever we're running locally, and Peel picks the model if you'd rather not.
+        </p>
+      </div>
+    </div>
+    <p class="req">
+      Setup for each client lives in the repo. We're building a proper Integrations screen for this.
+    </p>
+  </div>
+</section>
+
+<section id="screens">
+  <div class="wrap">
+    <h2>Peel, running on macOS</h2>
+    <p class="section-lede">
+      Screenshots are coming. We're setting up a clean demo profile first, because our own install
+      is full of private repo names.
+    </p>
+    <div class="two">
+      <div class="shot"><div><strong>Work / Inbox</strong><br><code>inbox.png</code></div></div>
+      <div class="shot"><div><strong>Repos</strong><br><code>repos.png</code></div></div>
+      <div class="shot"><div><strong>Integrations</strong><br><code>integrations.png</code></div></div>
+      <div class="shot"><div><strong>Observe / Swarm</strong><br><code>swarm.png</code></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="swarm">
+  <div class="wrap">
+    <h2>What is a swarm?</h2>
+    <p class="section-lede">
+      A swarm is a few Macs running Peel together. Each one advertises what it has: repos,
+      hardware, models. Peel sends a task to whichever machine is best equipped to run it.
+    </p>
+    <p class="section-lede">
+      One Mac works fine on its own. A swarm on your LAN doesn't need an account either.
+      <a href="https://github.com/cloke/peel-releases/blob/main/SWARMS.md">Read the swarm guide</a>
+    </p>
+  </div>
+</section>
+
+<section id="area">
+  <div class="wrap">
+    <h2>A quick tour</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Area</th><th>What it is for</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Home</strong></td><td>Where you land. Current work and repo health at a glance.</td></tr>
+          <tr><td><strong>Work</strong></td><td>The Inbox, plus the detail on any run you want to dig into.</td></tr>
+          <tr><td><strong>Boards</strong></td><td>GitHub Projects, wired up so agents can pull work off them.</td></tr>
+          <tr><td><strong>Repos</strong></td><td>Everything about a repo. Branches, PRs, the search index, worktrees.</td></tr>
+          <tr><td><strong>Agents</strong></td><td>Templates and schedules. Plugins and skill packs live here too.</td></tr>
+          <tr><td><strong>Observe</strong></td><td>Swarm state, model routing, and whether any of it was worth it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="get">
+  <div class="wrap">
+    <h2>Get Peel</h2>
+    <p class="section-lede">Peel is in active development. It needs macOS 26 (Tahoe).</p>
+    <a class="btn btn-primary" href="https://github.com/cloke/peel-releases/releases/latest">Download for macOS</a>
+    <a class="btn btn-secondary" href="https://github.com/cloke/peel-releases/blob/main/CHANGELOG.md">Read the changelog</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footlinks">
+      <a href="https://github.com/cloke/peel-releases/releases/latest">Download</a>
+      <a href="https://github.com/cloke/peel-releases/blob/main/FEATURES.md">Feature guide</a>
+      <a href="https://github.com/cloke/peel-releases/blob/main/SWARMS.md">Swarms</a>
+      <a href="https://github.com/cloke/peel-releases/blob/main/CHANGELOG.md">Changelog</a>
+    </div>
+    <div>Peel back the layers of your development environment.</div>
+  </div>
+</footer>
+
+</body>
+</html>
