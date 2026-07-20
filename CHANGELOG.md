@@ -3,6 +3,8 @@
 Notable user-visible changes to Peel are recorded here. Peel is in active development, so this
 changelog follows public signed releases rather than every internal commit.
 
+Each entry links to its full release notes.
+
 ## Unreleased
 
 ### Documentation
@@ -15,7 +17,179 @@ changelog follows public signed releases rather than every internal commit.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.3.1 - 2026-07-20
+
+Three fixes to keep indexed repositories and their search data up to date.
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.3.1)
+
+### Fixed
+
+- Followed workspaces stopped picking up new commits when their submodules were checked out
+  detached. Sync updated the branch references but left files frozen on disk, so a repository
+  could sit days behind while every sync reported success. Detached submodules now move forward
+  when it's provably safe, meaning nothing uncommitted and nothing unique to lose.
+- Enrichment could stall permanently. An oversized re-embedding batch could kill the local
+  embedding server mid-request, and the same batch was retried every run, so affected
+  repositories never finished. Batches are now sized by content length rather than a fixed
+  count, and fall back to one chunk at a time.
+
+### Changed
+
+- Enrichment and quality scanning now run on a schedule. Both steps are incremental and
+  previously only advanced when triggered by hand.
+
+## 2.3.0 - 2026-07-20
+
+Fleet-scale RAG management, and the app stays responsive during heavy indexing and sync.
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.3.0)
+
+### Added
+
+- **Repository Fleet inspector.** One control plane for the whole RAG fleet, in the UI and over
+  MCP, with grouped bulk management and atomic bulk writes.
+- **Fleet-wide processing policy.** Choose full automatic processing or vector-index-only, at
+  fleet, workspace, or repository scope.
+- **Routing previews.** Bulk source changes resolve through a preview, and reviewed previews
+  revalidate before any policy is written.
+- **Workspace-aware source policy**, following a default, then workspace, then repository
+  hierarchy.
+- **Sign in with Apple for direct-download builds.** Developer ID builds can't carry the native
+  entitlement, so the direct build runs Apple's web OAuth flow in-app.
+- **Lane-aware transport QoS**, so interactive peer-to-peer requests no longer queue behind bulk
+  RAG transfers.
+
+### Changed
+
+- RAG status polling is latency-bounded and reads from a cache, so it can't queue behind indexing
+  or imports.
+- Semantic search runs on a read-only lane and searches fleet partitions concurrently, degrading
+  to the text projection when it has to.
+- Text search stays responsive during indexing, served from a durable last-complete projection.
+- Indexing fails fast when the embedding provider's vector width doesn't match the index, rather
+  than corrupting state.
+
+### Fixed
+
+- UI automation clicks could deadlock the app.
+- The swarm map looked frozen when idle. It now keeps a gentle ambient refresh.
+- Stale plugin folder grants returned a generic server failure instead of something actionable.
+
+## 2.2.2 - 2026-07-18
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.2.2)
+
+### Fixed
+
+- The direct `swarm.remote-tool-call <worker> app.update` form was blocked for your own verified
+  machines, because it took a receive path that still hit an over-broad safety gate. Remote fleet
+  updates already worked through the worker's local update trigger. Now the direct form works too.
+
+## 2.2.1 - 2026-07-18
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.2.1)
+
+### Fixed
+
+- **Remote fleet updates work again.** One of your own machines can trigger another release-build
+  machine to update itself through Sparkle, with no source checkout and no operator involved. An
+  over-broad safety gate was blocking it.
+- Hardened the headless updater so it runs strictly on demand and doesn't compete with the app's
+  normal update checks.
+
+## 2.2.0 - 2026-07-18
+
+The direct-download build is unsandboxed again, which restores full local execution.
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.2.0)
+
+### Changed
+
+- **The direct build is no longer sandboxed.** The App Sandbox blocked Peel from executing
+  Homebrew-installed CLIs like `gh` and `node`, which meant agent chains and patrols couldn't run
+  at all. The direct-download build is still notarized with a hardened runtime.
+
+### Upgrade note
+
+- App data moved out of the sandbox container to `~/Library/Application Support/Peel`. You may
+  need to re-add your repositories after updating. Folder access no longer needs per-folder
+  grants, and SSH and Homebrew tools work with no extra setup.
+- The Mac App Store and TestFlight build stays sandboxed, because Apple requires it, and is a
+  more limited variant. Use the direct download for the full agent workflow.
+
+## 2.1.2 - 2026-07-17
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.1.2)
+
+### Fixed
+
+- **Local execution no longer hangs.** In 2.1.1, git operations, agent chains, and terminal
+  commands could hang indefinitely, waiting on a helper connection that never completed. The app
+  now falls back to in-sandbox execution immediately.
+- **SSH git works** once you grant access to your `~/.ssh` folder. Passphrase-protected keys
+  aren't supported in this build yet, so use a passphrase-less key for now.
+
+## 2.1.1 - 2026-07-17
+
+Repairs sign-in and session persistence in the direct-download build.
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.1.1)
+
+### Fixed
+
+- **Google sign-in works again.** 2.1.0 couldn't save your session, showing a keychain error
+  after signing in and then signing you out on every launch. The app now carries the keychain
+  entitlements it needs.
+- **No more launch crash from a denied keychain prompt.** Clicking Deny on a keychain dialog could
+  crash the app at startup and keep crashing. It now continues and retries on a later launch.
+- Repaired the release build pipeline so future updates ship reliably through the in-app updater.
+
+### Notes
+
+- You may see a handful of keychain prompts on first launch if you previously used a TestFlight or
+  self-built copy. Click **Always Allow** on each and they won't return.
+- Sign in with Apple isn't available in this build. Apple restricts that capability to App Store
+  and TestFlight builds, so use Google sign-in here. (A web-based flow arrived in 2.3.0.)
+
+## 2.1.0 - 2026-07-17
+
+Repository intelligence becomes trustworthy enough that an agent can ask Peel what it needs, act
+on the answer, and leave better knowledge behind.
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.1.0)
+
+### Added
+
+- **One repository-scoped door for what agents need to know**, covering prior decisions, fixes,
+  lessons, and source. Peel ranks the evidence within a context budget and makes stale or
+  ambiguous knowledge visible instead of presenting it as timeless truth.
+- **A Playground that understands the swarm.** Local chat can ground a conversation in a
+  repository indexed on another Mac and use the model and retrieval tools available there. If that
+  peer goes offline, Playground falls back to this Mac's synced overlay and explains the degraded
+  route rather than losing the conversation.
+
+### Changed
+
+- Scheduled work stays active until its chain actually finishes, and records real failures instead
+  of optimistic starts.
+- A Mac receiving a RAG overlay no longer repeats the source machine's analysis and enrichment.
+  Derived knowledge moves across the swarm while the expensive work stays put, which cuts latency,
+  GPU load, and battery use.
+- App Store and direct-download builds are now distinct artifacts. The Store build stays sandboxed
+  and Sparkle-free, and the Developer ID build keeps signed updates.
+
+### Fixed
+
+- Peel preserves readable local stores when a build meets an unfamiliar schema, rather than
+  treating them as corruption. Schema histories are frozen and model-shape fingerprints are pinned
+  by tests.
+
+### Upgrade note
+
+- Peel 2.0.0 can find this release but can't launch Sparkle's sandboxed installer. Install 2.1.0
+  once from the notarized DMG. Your existing store migrates in place, and later releases update
+  normally from inside Peel.
+
 ## 2.0.0 - 2026-07-14
+
+The first signed and notarized public release.
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.0.0)
 
 ### Distribution
 
@@ -36,8 +210,6 @@ changelog follows public signed releases rather than every internal commit.
 - Distributed swarm execution with RAG overlay sharing and GPU routing.
 - Live traffic and activity replay across Macs.
 - More than 300 tools through MCP, plus an OpenAI-compatible local API.
-
-[Download Peel 2.0.0](https://github.com/cloke/peel-releases/releases/tag/v2.0.0)
 
 ## Project milestones
 
