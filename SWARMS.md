@@ -1,13 +1,8 @@
 # What Is a Peel Swarm?
 
-A **swarm** is a group of Macs running Peel together. Each Mac joins as a worker and advertises what it can contribute: repositories, CPU and GPU capability, memory, local models, and availability.
+A **swarm** is a group of Macs running Peel together. Each Mac joins as a worker and advertises what it can contribute: its repositories, its hardware, and the local models it has.
 
-Peel can then:
-
-- run an agent task where the repository already exists;
-- move local-model inference to a stronger GPU;
-- share reusable repository analysis;
-- keep one view of workers, tasks, activity, and knowledge.
+Peel can then run an agent task on the Mac that already has the repository, move local-model inference to a stronger GPU, and share repository analysis so the same work isn't done twice. You get one view across all of it.
 
 You do **not** need a swarm to use Peel. Start with one Mac and add another when you want more capacity, an always-on worker, or access to repositories and models elsewhere.
 
@@ -15,7 +10,7 @@ You do **not** need a swarm to use Peel. Start with one Mac and add another when
 
 Macs on the same local network can participate without account sign-in. Choose **Not now** at the sign-in prompt and start the local swarm.
 
-For durable membership, invite links, and coordination across networks, sign in with an available account provider. Peel uses Firestore for small records such as membership, invites, worker state, and offline task claims. Real-time and bulk peer traffic travels over Iroh; source code and bulk data are not routed through Firestore.
+For durable membership, invite links, and coordination across networks, sign in with an available account provider. Peel uses Firestore for small coordination records like membership and worker state. Real-time and bulk peer traffic travels over Iroh instead. Source code and bulk data never go through Firestore.
 
 ## Create a swarm
 
@@ -80,7 +75,7 @@ Use **Observe → Swarm → Dashboard** for hardware and topology, or **Swarm Tr
 4. If a peer needs to clone it, configure that peer's **Swarm Clone Root** first.
 5. Launch from **Agents → Templates**, **Boards**, or an MCP client.
 
-Peel selects an eligible worker based on repository availability, hardware, models, and load. The run appears in **Work → Inbox** regardless of which Mac performs it.
+Peel picks an eligible worker based on who has the repository, what hardware and models they have, and how busy they are. The run appears in **Work → Inbox** no matter which Mac performs it.
 
 ## Safety and control
 
@@ -98,7 +93,7 @@ An owner or admin must approve the request from the swarm's **Members** tab.
 
 ### The other Mac does not appear
 
-Confirm both Macs are approved members of the same swarm, have clicked **Join Swarm**, run a current Peel build, have network access, and show recent heartbeats. Peer paths connect lazily, so the first task or peer operation may establish the connection.
+Check that both Macs are approved members of the same swarm and that both have clicked **Join Swarm**. Then confirm they're on a current Peel build with network access and recent heartbeats. Peer paths connect lazily, so the first task or peer operation may be what establishes the connection.
 
 ### No worker can take a task
 
@@ -106,4 +101,4 @@ At least one fresh worker must accept tasks for the repository and have the nece
 
 ### Search differs between Macs
 
-Open **Observe → RAG Health** and compare index freshness, embedding coverage, active embedding models, and overlay transfer state.
+Open **Observe → RAG Health** and compare the two Macs. Check index freshness and embedding coverage first, then whether they're running the same embedding model.

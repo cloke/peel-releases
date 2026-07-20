@@ -2,7 +2,8 @@
 
 > Peel back the layers of your development environment.
 
-Peel is a macOS workspace for developers who use AI coding agents across real repositories. It brings repository context, agent runs, pull requests, worktrees, local models, and multiple Macs into one place—while keeping review and merge decisions visible.
+Peel is a macOS workspace for developers who point AI coding agents at real repositories. Agent
+runs, pull requests, and worktrees live in one place instead of five. You still decide what lands.
 
 Peel is in active development and currently requires **macOS 26 (Tahoe)**.
 
@@ -10,41 +11,49 @@ Peel is in active development and currently requires **macOS 26 (Tahoe)**.
 
 ## What Peel helps you do
 
-- **Understand a repository** with local semantic search, exact-text search, dependency graphs, and durable project guidance.
-- **Run agent workflows safely** in isolated git worktrees, with live progress, review gates, diffs, and pull-request context.
-- **Keep one attention queue** for active runs, failed work, PR reviews, alerts, and completed changes awaiting a decision.
-- **Automate recurring work** with templates, schedules, patrols, long-running tasks, and always-on specialist agents.
-- **Use the hardware you already own** by routing work and local-model inference across a swarm of Macs.
-- **Connect other agent clients** through Peel's MCP and OpenAI-compatible APIs.
+- **Understand a repository.** Search by meaning, not just filename. Dependency graphs show what
+  breaks if you change something.
+- **Run agent workflows safely.** Every run gets its own git worktree. You see the diff and the
+  checks before anything merges.
+- **Keep one attention queue.** Finished runs, failures, and PRs waiting on review all land in the
+  Inbox.
+- **Automate recurring work.** Save a workflow as a template and put it on a schedule. Patrols
+  keep going in the background.
+- **Use hardware you already own.** Peel routes work across a swarm of Macs, including local model
+  inference.
+- **Connect the agents you already use.** Peel speaks MCP and the OpenAI API.
 
 ## The core workflow
 
 1. Add or select a repository.
-2. Index it so Peel and its agents can search the code by meaning, not only by filename.
-3. Choose an agent workflow or describe a task from an MCP client.
+2. Index it, so Peel and its agents can search the code by meaning rather than filename.
+3. Choose an agent workflow, or describe a task from an MCP client.
 4. Peel creates an isolated worktree and streams the run into the Inbox.
-5. Review the plan, output, diff, checks, and pull request before deciding what lands.
+5. Review what it did and decide whether it lands.
 
-The repository stays at the center. RAG, agents, worktrees, schedules, and learnings all attach back to the code they are meant to improve.
+The repository stays at the center. Everything else hangs off the code it's meant to improve.
 
 ## A quick tour
 
 | Area | What it is for |
 |---|---|
-| **Home** | A command center for current work, repository health, and swarm activity. |
-| **Work** | The Inbox, agent-run details, long tasks, and everything waiting for attention. |
-| **Boards** | GitHub Projects as a dispatch surface for agent work. |
-| **Repos** | Repositories, branches, PRs, RAG, graphs, skills, and worktrees. |
-| **Agents** | Workflow templates, schedules, patrols, specialist agents, plugins, and skill packs. |
-| **Observe** | Swarm state, models, GPU routing, analytics, RAG health, traffic, replay, and knowledge. |
+| **Home** | Where you land. Current work and repository health at a glance. |
+| **Work** | The Inbox, plus the detail on any run you want to dig into. |
+| **Boards** | GitHub Projects, wired up so agents can pull work off them. |
+| **Repos** | Everything about a repository. Branches, PRs, the search index, worktrees. |
+| **Agents** | Templates and schedules. Plugins and skill packs live here too. |
+| **Observe** | Swarm state, model routing, and whether any of it was worth it. |
 
-The [Feature Guide](FEATURES.md) explains each area in practical terms and suggests where to begin.
+The [Feature Guide](FEATURES.md) walks through each area and suggests where to begin.
 
 ## What is a swarm?
 
-A swarm is a group of Macs running Peel together. Each Mac becomes a **worker** that advertises its repositories, hardware, models, and availability. Peel can send a task to the machine best equipped to perform it, share reusable repository analysis, or route local-model inference to a stronger GPU.
+A swarm is a group of Macs running Peel together. Each one advertises what it has: repositories,
+hardware, models. Peel sends a task to whichever machine is best equipped to run it, and can share
+repository analysis so the same work isn't done twice.
 
-You can use Peel entirely on one Mac. A local LAN swarm does not require an account; account sign-in and invite links let machines coordinate across networks.
+One Mac works fine on its own. A swarm on your LAN doesn't need an account either. Signing in and
+using invite links lets machines coordinate across networks.
 
 See [What is a swarm, and how do I join one?](SWARMS.md) for the setup path.
 
@@ -55,11 +64,14 @@ See [What is a swarm, and how do I join one?](SWARMS.md) for the setup path.
 3. Open it and drag **Peel** into **Applications**.
 4. Launch Peel.
 
-The app and DMG are signed with Developer ID, notarized by Apple, and distributed with SHA-256 checksums. Peel uses a signed Sparkle feed for future updates.
+The app and DMG are signed with Developer ID and notarized by Apple, and we publish SHA-256
+checksums for both. Updates come through a signed Sparkle feed.
 
 ## Connect an agent client
 
-Peel exposes more than 300 tools from its local MCP server at `http://127.0.0.1:8765/rpc`. Tools cover repositories, git, GitHub, RAG, agent chains, worktrees, swarms, insights, UI automation, and diagnostics.
+Peel runs a local MCP server at `http://127.0.0.1:8765/rpc` with more than 300 tools behind it.
+They cover the same ground the app does: repositories and git, GitHub, code search, agent chains,
+swarms, and diagnostics.
 
 ```json
 {
@@ -71,21 +83,25 @@ Peel exposes more than 300 tools from its local MCP server at `http://127.0.0.1:
 }
 ```
 
-Tool schemas use progressive discovery so clients load common capabilities first and fetch specialized schemas only when needed.
+Tool schemas use progressive discovery. Clients load the common capabilities first and fetch the
+specialized schemas only when they need them.
 
 ## Project history
 
-The codebase began on **December 19, 2020** as a small SwiftUI developer-tool experiment. It grew into a Git, GitHub, Homebrew, and agent workspace, then became **Peel** on January 17, 2026 as its repository intelligence and distributed-agent direction took shape.
+The codebase started on **December 19, 2020** as a small SwiftUI developer-tool experiment. It
+grew into a workspace for Git, GitHub, and Homebrew, picked up agents along the way, and became
+**Peel** on January 17, 2026 once the repository intelligence and distributed-agent direction took
+shape.
 
 Peel 2.0.0, published July 14, 2026, was the first signed and notarized public binary release.
 
 ## Release integrity
 
-Each release includes:
+Every release ships four things:
 
-- a signed and notarized drag-to-Applications DMG;
-- a signed ZIP used by the in-app updater;
-- a Sparkle appcast;
-- SHA-256 checksums for the DMG and ZIP.
+- a signed and notarized drag-to-Applications DMG
+- a signed ZIP that the in-app updater uses
+- a Sparkle appcast
+- SHA-256 checksums for the DMG and the ZIP
 
-Release notes identify the exact source commit embedded in the build.
+Release notes name the exact source commit embedded in the build.
