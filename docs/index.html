@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- SCAFFOLD: remove this noindex line when the page is ready to launch. -->
 <meta name="robots" content="noindex">
-<title>Peel — a macOS workspace for AI coding agents</title>
-<meta name="description" content="Peel brings repository context, agent runs, pull requests, worktrees, local models, and multiple Macs into one place.">
+<title>Peel: a macOS workspace for AI coding agents</title>
+<meta name="description" content="Peel keeps AI coding work attached to the repo it belongs to. Runs happen in isolated worktrees, and you review the diff before anything lands.">
 <style>
   :root {
     --bg: #ffffff;
@@ -77,7 +77,7 @@
   h2 { font-size: clamp(24px, 3.4vw, 32px); letter-spacing: -0.02em; margin: 0 0 12px; font-weight: 650; }
   .section-lede { color: var(--muted); max-width: 60ch; margin: 0 0 36px; }
 
-  /* Screenshot slots — replaced with real captures once the demo profile exists. */
+  /* Screenshot slots. Replaced with real captures once the demo profile exists. */
   .shot {
     background: var(--slot); border: 1px dashed var(--line); border-radius: var(--radius);
     aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center;
@@ -124,8 +124,8 @@
     <p class="eyebrow">Peel back the layers of your development environment</p>
     <h1>A macOS workspace for AI coding agents.</h1>
     <p class="lede">
-      Peel brings repository context, agent runs, pull requests, worktrees, local models, and
-      multiple Macs into one place — while keeping review and merge decisions visible.
+      We built Peel so AI coding work stays attached to the repo it belongs to. Agent runs happen
+      in isolated worktrees. You watch them work, then review the diff before anything lands.
     </p>
     <a class="btn btn-primary" href="https://github.com/cloke/peel-releases/releases/latest">Download for macOS</a>
     <a class="btn btn-secondary" href="https://github.com/cloke/peel-releases/blob/main/FEATURES.md">Explore every feature</a>
@@ -134,8 +134,8 @@
 
   <div class="shot">
     <div>
-      <strong>Screenshot slot — Home</strong><br>
-      Blocked on the sanitized demo profile.<br>
+      <strong>Screenshot slot: Home</strong><br>
+      Waiting on the clean demo profile.<br>
       <code>docs/assets/screenshots/home.png</code>
     </div>
   </div>
@@ -146,39 +146,38 @@
   <div class="wrap">
     <h2>What Peel helps you do</h2>
     <p class="section-lede">
-      The repository stays at the center. RAG, agents, worktrees, schedules, and learnings all
-      attach back to the code they are meant to improve.
+      The repo stays at the center. Everything else hangs off the code it's meant to improve.
     </p>
     <div class="grid">
       <div class="card">
         <span class="num">01</span>
         <h3>Understand a repository</h3>
-        <p>Local semantic search, exact-text search, dependency graphs, and durable project guidance.</p>
+        <p>Search your code by meaning instead of filename. Indexing happens locally, so nothing leaves the machine.</p>
       </div>
       <div class="card">
         <span class="num">02</span>
         <h3>Run agent workflows safely</h3>
-        <p>Isolated git worktrees, with live progress, review gates, diffs, and pull-request context.</p>
+        <p>Every run gets its own git worktree. You see the plan, the diff, and the checks before deciding what merges.</p>
       </div>
       <div class="card">
         <span class="num">03</span>
         <h3>Keep one attention queue</h3>
-        <p>Active runs, failed work, PR reviews, alerts, and completed changes awaiting a decision.</p>
+        <p>The Inbox collects whatever needs you. Finished runs, failures, and PRs waiting on review all land in one place.</p>
       </div>
       <div class="card">
         <span class="num">04</span>
         <h3>Automate recurring work</h3>
-        <p>Templates, schedules, patrols, long-running tasks, and always-on specialist agents.</p>
+        <p>Save a workflow as a template, then put it on a schedule. Patrols keep working in the background.</p>
       </div>
       <div class="card">
         <span class="num">05</span>
         <h3>Use hardware you already own</h3>
-        <p>Route work and local-model inference across a swarm of Macs.</p>
+        <p>Got a second Mac sitting idle? Peel routes work to it, including local model inference.</p>
       </div>
       <div class="card">
         <span class="num">06</span>
-        <h3>Connect other agent clients</h3>
-        <p>Peel's MCP and OpenAI-compatible APIs make it the endpoint your existing tools point at.</p>
+        <h3>Connect the agents you use</h3>
+        <p>Peel speaks MCP and the OpenAI API, so your existing tools can talk to it without changing how you work.</p>
       </div>
     </div>
   </div>
@@ -186,32 +185,29 @@
 
 <section id="connect">
   <div class="wrap">
-    <h2>Your tools. Your models.</h2>
+    <h2>Point your agents at Peel</h2>
     <p class="section-lede">
-      Peel runs a local server that speaks two protocols, so the coding agents you already use
-      gain Peel's capabilities without changing your workflow.
+      Peel runs a local server that speaks two protocols. Which one you want depends on whether
+      you're after the tools or the models.
     </p>
     <div class="two">
       <div class="card">
-        <h3>Tools out — MCP</h3>
+        <h3>Tools, over MCP</h3>
         <p>
-          Peel exposes its tool surface over MCP. Point Claude Code, Claude Desktop, Cursor, or
-          Continue at the local endpoint and Peel's repository, git, and agent tooling appears
-          in the client you already use.
+          Point Claude Code or Cursor at the local endpoint. Peel's repository and git tooling
+          shows up inside the client you already use.
         </p>
       </div>
       <div class="card">
-        <h3>Models out — OpenAI-compatible</h3>
+        <h3>Models, over the OpenAI API</h3>
         <p>
-          Peel also serves a routed model pool over an OpenAI-compatible API. Any OpenAI-SDK
-          client can use Peel's local and routed models through one base URL — including
-          automatic routing.
+          Peel also serves models on an OpenAI-compatible endpoint. One base URL gets any OpenAI
+          client whatever we're running locally, and Peel picks the model if you'd rather not.
         </p>
       </div>
     </div>
     <p class="req">
-      Setup for each client is documented in the repository. A dedicated in-app Integrations
-      screen is in progress.
+      Setup for each client lives in the repo. We're building a proper Integrations screen for this.
     </p>
   </div>
 </section>
@@ -220,8 +216,8 @@
   <div class="wrap">
     <h2>Peel, running on macOS</h2>
     <p class="section-lede">
-      Screenshots are pending — every capture must come from a sanitized demo profile seeded
-      with public repositories only.
+      Screenshots are coming. We're setting up a clean demo profile first, because our own install
+      is full of private repo names.
     </p>
     <div class="two">
       <div class="shot"><div><strong>Work / Inbox</strong><br><code>inbox.png</code></div></div>
@@ -236,14 +232,12 @@
   <div class="wrap">
     <h2>What is a swarm?</h2>
     <p class="section-lede">
-      A swarm is a group of Macs running Peel together. Each Mac becomes a worker that
-      advertises its repositories, hardware, models, and availability. Peel sends a task to the
-      machine best equipped to perform it, shares reusable repository analysis, or routes
-      local-model inference to a stronger GPU.
+      A swarm is a few Macs running Peel together. Each one advertises what it has: repos,
+      hardware, models. Peel sends a task to whichever machine is best equipped to run it.
     </p>
     <p class="section-lede">
-      You can use Peel entirely on one Mac. A local LAN swarm does not require an account.
-      <a href="https://github.com/cloke/peel-releases/blob/main/SWARMS.md">Read the swarm guide →</a>
+      One Mac works fine on its own. A swarm on your LAN doesn't need an account either.
+      <a href="https://github.com/cloke/peel-releases/blob/main/SWARMS.md">Read the swarm guide</a>
     </p>
   </div>
 </section>
@@ -255,12 +249,12 @@
       <table>
         <thead><tr><th>Area</th><th>What it is for</th></tr></thead>
         <tbody>
-          <tr><td><strong>Home</strong></td><td>A command center for current work, repository health, and swarm activity.</td></tr>
-          <tr><td><strong>Work</strong></td><td>The Inbox, agent-run details, long tasks, and everything waiting for attention.</td></tr>
-          <tr><td><strong>Boards</strong></td><td>GitHub Projects as a dispatch surface for agent work.</td></tr>
-          <tr><td><strong>Repos</strong></td><td>Repositories, branches, PRs, RAG, graphs, skills, and worktrees.</td></tr>
-          <tr><td><strong>Agents</strong></td><td>Workflow templates, schedules, patrols, specialist agents, plugins, and skill packs.</td></tr>
-          <tr><td><strong>Observe</strong></td><td>Swarm state, models, GPU routing, analytics, RAG health, traffic, replay, and knowledge.</td></tr>
+          <tr><td><strong>Home</strong></td><td>Where you land. Current work and repo health at a glance.</td></tr>
+          <tr><td><strong>Work</strong></td><td>The Inbox, plus the detail on any run you want to dig into.</td></tr>
+          <tr><td><strong>Boards</strong></td><td>GitHub Projects, wired up so agents can pull work off them.</td></tr>
+          <tr><td><strong>Repos</strong></td><td>Everything about a repo. Branches, PRs, the search index, worktrees.</td></tr>
+          <tr><td><strong>Agents</strong></td><td>Templates and schedules. Plugins and skill packs live here too.</td></tr>
+          <tr><td><strong>Observe</strong></td><td>Swarm state, model routing, and whether any of it was worth it.</td></tr>
         </tbody>
       </table>
     </div>
@@ -270,7 +264,7 @@
 <section id="get">
   <div class="wrap">
     <h2>Get Peel</h2>
-    <p class="section-lede">Peel is in active development and currently requires macOS 26 (Tahoe).</p>
+    <p class="section-lede">Peel is in active development. It needs macOS 26 (Tahoe).</p>
     <a class="btn btn-primary" href="https://github.com/cloke/peel-releases/releases/latest">Download for macOS</a>
     <a class="btn btn-secondary" href="https://github.com/cloke/peel-releases/blob/main/CHANGELOG.md">Read the changelog</a>
   </div>
@@ -284,7 +278,7 @@
       <a href="https://github.com/cloke/peel-releases/blob/main/SWARMS.md">Swarms</a>
       <a href="https://github.com/cloke/peel-releases/blob/main/CHANGELOG.md">Changelog</a>
     </div>
-    <div>Peel — peel back the layers of your development environment.</div>
+    <div>Peel back the layers of your development environment.</div>
   </div>
 </footer>
 
