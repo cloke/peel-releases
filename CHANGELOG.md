@@ -9,8 +9,11 @@ changelog follows public signed releases rather than every internal commit.
 
 - Added a public product overview, a complete feature map, and a task-focused swarm onboarding
   guide.
-- Scaffolded the product page under `docs/`, ready for GitHub Pages. Not published yet, and
-  screenshots are still pending.
+- Published the product page at https://cloke.github.io/peel-releases/, served from the
+  `gh-pages` branch. Screenshots are still pending, so the page carries `robots noindex` until
+  they land.
+- Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
+  if the content fails a denylist and OCR check.
 
 ## 2.0.0 - 2026-07-14
 
