@@ -17,6 +17,34 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.5.0 - 2026-07-21
+
+Peel now gives agents one trustworthy memory system, makes better swarm routing decisions under real machine load, and adds a local vision tool for image-aware work.
+
+## Knowledge is one surface
+
+Agent memory now lives in signed, scoped knowledge records instead of separate learnings, insights, guidance, and RAG lesson stores. Peel verifies authorship, keeps private records local, rebuilds its search projection automatically, and uses model-jury verdicts to separate durable guidance from weak or stale claims.
+
+Recall is useful even when the semantic index is cold. Agents get deterministic lexical fallback, semantic paraphrase matching, repository-aware filtering, and a small digest they can hydrate on demand. Chain outcomes and review-quality feedback feed the same system without duplicate records.
+
+The deprecated `learnings.*`, `insights.*`, and `rag.lessons.*` MCP tools have been removed. Integrations should use `knowledge.recall`, `knowledge.get`, `knowledge.add`, `knowledge.feedback`, `knowledge.verdict`, and `knowledge.adjudicate`.
+
+## Smarter swarm routing
+
+Dispatch now accounts for memory pressure, thermal state, and the real frontier-model headroom available on each machine. Brain-only nodes also announce themselves before capability filtering, so they can participate instead of disappearing from the fleet.
+
+## Local vision
+
+A new Labs-gated `vision.describe` tool runs image understanding locally through MLX VLM. It gives agents a private path for screenshot and image analysis without sending the source image to a hosted model.
+
+## Quieter, more responsive operation
+
+Screen capture no longer triggers an unexpected Screen Recording permission prompt. MCP clients identify themselves and can be inspected through `clients.list`, large request parsing stays off the main actor, and legacy knowledge migration is paged in the background so an established installation does not freeze during upgrade.
+
+Signed and notarized Apple silicon macOS build. Source commit: `38e5a2acc48a6453bf7dcaa0caed933a166d21c7`.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.5.0)
+
 ## 2.4.0 - 2026-07-21
 
 Repo announcements are now scoped per swarm, with vision support on more model routes and a batch of responsiveness fixes.
