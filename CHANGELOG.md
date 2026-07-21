@@ -17,6 +17,39 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.4.0 - 2026-07-21
+
+Repo announcements are now scoped per swarm, with vision support on more model routes and a batch of responsiveness fixes.
+
+## Privacy: per-swarm repo announcements
+
+A machine that belongs to more than one swarm used to tell every swarm about every repo it had indexed. Being indexed locally was enough to be announced. Now a machine announces only the repos you choose, per swarm.
+
+The RAG overlay payload was already gated. This closes the matching gap on the announcement itself, across all three surfaces that carried it. Three new tools configure it at runtime: `swarm.announce.list`, `swarm.announce.add`, and `swarm.announce.remove`. Existing swarms are seeded once from what is already indexed, so nothing changes for them on upgrade.
+
+## Set up a repo by pulling from a peer
+
+If another machine in your swarm already has a repo indexed, you can pull that index and be ready to search. No local indexing needed. The RAG tab now leads with "Pull from <peer>" on a repo this machine has not indexed, and picks the right transfer shape for you.
+
+## Vision on more routes
+
+Local Ollama models now receive images, including for patrol review. OpenAI-style multimodal messages convert to the shape Ollama expects. The Copilot route refuses image content it cannot handle rather than silently dropping it.
+
+## Responsiveness
+
+- Heartbeats fast-fail to unreachable peers through a per-peer circuit breaker, so one dead machine no longer stretches every beat.
+- Analyze and enrich report progress on the same throttle indexing already used.
+- Ledger ingest is bounded so it cannot flood the main actor.
+- The main-thread watchdog runs in release builds now, and stops reporting zeroes as health.
+
+## Also
+
+- Docling honors its OCR toggle and the rest of its preset knobs instead of always running OCR.
+- Learning retraction has a single owner across all three stores, so a retracted learning stays retracted everywhere.
+- Analysis numbers are reported honestly, and the analyzer pin is exposed.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.4.0)
+
 ## 2.3.1 - 2026-07-20
 
 Three fixes to keep indexed repositories and their search data up to date.
