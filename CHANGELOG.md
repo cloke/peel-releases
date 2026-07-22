@@ -17,6 +17,26 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.7.0 - 2026-07-22
+
+### ollama.chat: vision input + token usage
+- `ollama.chat` now accepts base64 `images`, so vision-capable models (e.g. gemma4) can read documents and screenshots directly over the swarm inference path, with no separate OCR step. Text-only calls are unchanged.
+- Responses now report `inputTokens` / `outputTokens` / `totalTokens` when the model provides them, for per-request cost estimation.
+
+### RAG & fleet
+- Auditable RAG transfer evidence and bounded transfer-ledger growth.
+- Cancellable RAG indexing recovery and complete file scanning (RAGCore bump).
+- Fleet coverage and policy scorecard; fleet version and Iroh health metrics.
+- Workspace authority repair and canonical knowledge-scope healing.
+
+### Fixes
+- Stop Ollama embedding crash loops.
+- Move MLX model cache to Application Support.
+- Make Knowledge UI automation actionable; isolate XCTest from production runtime state.
+- Analytics cards now steer the chart.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.7.0)
+
 ## 2.6.0 - 2026-07-22
 
 ## Unified knowledge for agents
