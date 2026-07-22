@@ -17,6 +17,13 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.8.0 - 2026-07-22
+
+### vision.ocr: on-device Apple Vision OCR
+- New `vision.ocr` MCP tool performs OCR with Apple's Vision framework (VNRecognizeText), running on the Neural Engine and GPU. It reads an image or rasterizes a PDF per page, entirely on-device with no Python and no network, and returns the recognized text, page count, timing, and optional per-line boxes with confidence. On scanned documents it is dramatically faster than CPU-bound OCR.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.8.0)
+
 ## 2.7.0 - 2026-07-22
 
 ### ollama.chat: vision input + token usage
