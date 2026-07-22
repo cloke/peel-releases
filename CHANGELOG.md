@@ -17,6 +17,30 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.6.0 - 2026-07-22
+
+## Unified knowledge for agents
+
+Compatibility note: the deprecated `learnings.*`, `insights.*`, and `rag.lessons.*` MCP tools have been removed. Custom clients and plugins should use `knowledge.recall`, `knowledge.add`, and `knowledge.verdict`.
+
+Peel now gives agents one durable knowledge surface for findings and guidance, plus reusable patterns and fixes. Entries are signed and content-addressed. Scope controls who can receive them, and the model jury evaluates them before they influence future work.
+
+## Faster tool discovery
+
+Agents now start with ten essential MCP tools and discover the rest on demand. This keeps initial prompts small while preserving access to Peel's full catalog through search and schema loading.
+
+## Counts that explain themselves
+
+Knowledge totals now separate universal and repository knowledge from workspace and private-device records. They also identify repository records that cannot travel between machines. Universal knowledge should agree across machines while local knowledge stays private by design.
+
+## Stronger trust boundaries
+
+Knowledge signatures bind the exact semantic content and verdicts bind to the matching schema and digest. Legacy records migrate conservatively, remote command payloads are no longer persisted, and plugin execution fails closed when its security boundary is unavailable.
+
+The iOS companion now uses the same knowledge model as macOS, so both surfaces present consistent durable context.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.6.0)
+
 ## 2.5.1 - 2026-07-22
 
 ## Safer local RAG indexing
