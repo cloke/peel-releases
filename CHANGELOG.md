@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.5.1 - 2026-07-22
+
+## Safer local RAG indexing
+
+Peel now excludes local OAuth, Firebase, TURN, signing-key, and service-account credential files before source indexing. Ignored local configuration no longer appears in Peel source search snippets or shared RAG artifacts.
+
+Existing Peel source indexes are cleaned on the next automatic checkout refresh. A new repository audit also prevents future changes from silently removing these protections.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.5.1)
+
 ## 2.5.0 - 2026-07-21
 
 Peel now gives agents one trustworthy memory system, makes better swarm routing decisions under real machine load, and adds a local vision tool for image-aware work.
