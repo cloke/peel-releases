@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.10.0 - 2026-07-23
+
+### Choose which CLI the knowledge jury runs on
+The jury's **Review** popover gains a **Run on** control for cloud models: keep *Match machine* to follow this Mac's CLI preference, or pin the jury to the **Claude CLI** (your own account) or **Copilot CLI** for that session — without changing the machine-wide preference. Availability still applies, so a pinned-but-unavailable CLI falls back to Copilot rather than failing.
+
+Under the hood, `runCloudAgentSession` gains an optional provider override any caller can use, laying groundwork for per-role provider routing.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.10.0)
+
 ## 2.9.0 - 2026-07-23
 
 ### Knowledge review: run the model jury on demand or on a schedule
