@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.9.0 - 2026-07-23
+
+### Knowledge review: run the model jury on demand or on a schedule
+The Knowledge view gains a **Review** control that runs the model jury over pending knowledge entries — pick how many to judge (5 / 10 / 20) and which model judges them (cloud or local), and it casts signed verdicts. For hands-off curation, schedule the new **Knowledge Adjudication** patrol; each Mac judges with its own local model, so running it on more than one machine builds the keep/retire quorum and model-family diversity.
+
+### Local model ids as data
+Local/ollama model ids now resolve through a Firestore-backed registry (`config/ollama_models`) with bundled offline defaults, mirroring the existing Copilot and MLX model registries. Adding a HuggingFace/ollama model or swapping a patrol's reviewer becomes a data edit — no rebuild, no fleet redeploy.
+
+### Fixes
+- Branch-aware RAG indexing (`rag.branch.index`) now diffs `origin/main` instead of a stale local `main`, so the changed-file set for a worktree or feature-branch index is correct.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.9.0)
+
 ## 2.8.0 - 2026-07-22
 
 ### vision.ocr: on-device Apple Vision OCR
