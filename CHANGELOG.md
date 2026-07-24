@@ -17,6 +17,57 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.12.0 - 2026-07-24
+
+## Knowledge
+
+`knowledge.compact` collapses mechanical redundancy in the knowledge corpus without
+involving the jury. It only removes duplication that needs no judgement, such as
+private pre-migration copies with a surviving canonical twin, the same title stored
+under a second kind, byte-identical copies, and empty bodies. It is dry-run by
+default and only touches entries the device itself authored. Anything requiring
+taste is still left to the jury. `knowledge.add` now also refuses a title that
+already exists under a different scope or kind and hands back the existing ref,
+which is what was minting near-duplicate twins.
+
+## Boards and runs
+
+Closed cards are archived off the Peel Roadmap board automatically (#1785).
+Merged `parallel/*` branches are deleted after merge, and stale debris is flagged
+rather than left to accumulate (#1740).
+
+## Playground
+
+Per-message telemetry persists across sessions, and tool calls collapse so a long
+transcript stays readable (#1857).
+
+## Release engineering
+
+Releases are now always cut from the main checkout. `git rev-parse --show-toplevel`
+returns the worktree root when the script runs inside one, so a worktree that
+happened to be on main passed every guard while its build artifacts landed in a
+directory that gets pruned. That is why v2.9.0 through v2.11.0 left no recoverable
+symbols behind.
+
+Each release now archives its `Peel.app.dSYM` to `~/Library/Developer/PeelSymbols`
+with a UUID manifest. The shipped binary is stripped, so this is the only way a
+crash report from a release can be symbolicated. Spotlight indexes that path by
+dSYM UUID, so `atos` and `lldb` resolve it automatically. Symbols stay on the build
+machine and are not published.
+
+Release notes now fetch merged PRs from the resolved repo instead of an environment
+variable that was never set (#1702).
+
+## Known issue
+
+This release does not fix #1754, the crash seen on long-running nodes. That fault
+is inside Apple's `swift_task_isCurrentExecutorWithFlags` executor identity check,
+reached from Apple's own frameworks, and it reproduces across two app builds and
+two OS seeds. Symbolication landed in this cycle, so the next occurrence on this
+release can be read in minutes rather than days.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.12.0)
+
 ## 2.10.0 - 2026-07-23
 
 ### Choose which CLI the knowledge jury runs on
