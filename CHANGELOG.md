@@ -17,6 +17,49 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.15.0 - 2026-07-25
+
+## Inbox filters now mean what they say
+
+The Inbox carries six kinds of item and was slicing them with filters that
+overlapped, hid things, and reused one word for three adjacent controls.
+
+**Alerts is now Health and Security.** Machine health and dependency advisories
+were sharing a bucket, so asking what was wrong with your machines also returned
+security advisories. Security also covers Dependabot pull requests, since the
+advisory and the pull request that closes it belong together. That removed the
+separate "Dependabot only" toggle, which was a fourth filter dimension doing a
+job the type filter already does.
+
+**Patrols are a kind of item, not a hidden mode.** Patrol entries used to be
+removed from every selection except Patrols, so "All Types" was not showing all
+types and there was no way to tell from the screen. A patrol that found something
+is now an ordinary row. A patrol that scanned and found nothing is still filtered
+out as noise, which is what kept the list clear in the first place.
+
+**New Machine filter.** Scope the Inbox to one Mac. Runs, tasks, cross machine
+runs and health observations all report which machine they came from. Pull
+requests and advisories belong to a repository rather than a Mac, so they drop
+out when you pick a machine instead of appearing under all of them. The control
+only shows up once you actually have work from more than one machine.
+
+**Three controls no longer all say "All".** They now read All, All Kinds and All
+Repos.
+
+## Known issues
+
+This release does not fix #1754. That crash is inside Apple's executor identity
+check, reached from Apple's own frameworks. Register state across four builds
+shows the same constant bit pattern rather than the varying garbage that memory
+corruption produces, which points away from a heap problem in the app. Full
+analysis is on the issue.
+
+The `llama-server` crash loop is also unresolved. Neither the Ollama upgrade nor
+removing the quantized KV cache changed the rate, which rules out both the
+version and that configuration and points upstream into the decode path.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.15.0)
+
 ## 2.14.0 - 2026-07-25
 
 ## Local inference problems now reach the Inbox
