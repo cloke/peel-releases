@@ -17,6 +17,45 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.13.0 - 2026-07-25
+
+## Local inference runtime health
+
+Peel already knew when Ollama was offline and did nothing with it, so a machine
+whose inference runtime died overnight stayed dead until someone noticed. The
+system doctor now checks the runtime properly and repairs the one thing that is
+safe to repair unattended.
+
+Detected at launch and in every doctor run:
+
+- Ollama installed but not running
+- `llama-server` crash-looping, counted from crash reports in the last hour
+- A quantized KV cache configured into the same decode path where the runner aborts
+- Two competing Ollama installs racing for the same port
+- A service log grown past half a gigabyte with no rotation
+
+Repaired automatically: only a service that is installed and simply is not
+running. That action is idempotent and reversible. Everything else is reported
+with the command that fixes it rather than applied, because silently rewriting
+this runtime's configuration is itself a good way to take it down.
+
+The repair is bounded to three attempts, five minutes apart, and only a real
+success resets that budget. A healer that restarts a service which dies on
+startup would reproduce the restart storm it is supposed to be reporting.
+
+Findings currently go to the log and the doctor report. Surfacing them in the
+Inbox needs the daemon-scoped observation path and is a separate change.
+
+## Known issue
+
+This release does not fix #1754, the crash seen on long-running nodes, which is
+reproduced on 2.12.0. The fault is inside Apple's executor identity check,
+reached from Apple's own frameworks. Register state across four builds now shows
+the same constant bit pattern rather than the varying garbage that memory
+corruption would produce, so the remaining heap-guard theory looks unlikely.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.13.0)
+
 ## 2.12.0 - 2026-07-24
 
 ## Knowledge
