@@ -17,6 +17,26 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.16.0 - 2026-07-25
+
+RAG corpus integrity.
+
+**One analyzer no longer counts as many.** The `analyzer_model` stamp is free text, and three kinds of noise inflated the "analyzed by N models" badge: the `chunk-analyzer` sentinel (not a model), and the same weights spelled `Qwen2.5-Coder-7B` by MLX and `qwen2.5-coder:7b` by Ollama. Those now collapse before anything reports on them, and off-pin drift is measured on canonical names so a pin is not reported as drifted by its own weights under another spelling. Moving tags like `gemma4:latest` are deliberately left alone — nothing recorded what the alias resolved to.
+
+**Sub-repos are no longer indexed twice.** RAGCore 2.16.0 stops the scanner walking into checkouts that already have their own row. On one superproject with 13 submodules this was 4,637 duplicate files and roughly 21,300 redundant chunks: double embedding cost, double analysis cost, and two search hits for every match inside a submodule.
+
+**Corpus data now carries a contract.** A producer declares what it guarantees about its corpus, and a receiver refuses anything below its minimum. Without this a clean machine re-imported the duplication on every pull from a stale peer and the fix never converged. Refusal names the peer and the remedy.
+
+*This is a hard cutover:* once a machine is on 2.16.0 it stops accepting corpus data from peers still on older builds. Update the whole fleet and let each producer re-index.
+
+**Existing duplication cleans itself.** On first launch, repo rows that are only a re-index of their own children are purged and the store is stamped. Recoverable — the superproject re-indexes from the checkout on disk.
+
+**Fleet maintenance works across your own machines.** RAG read and maintenance tools are now reachable under fleet trust, so a drifted or duplicated corpus can be repaired from any of your own Macs instead of needing a shell on the one holding it. Same-owner only; a stranger's peer still needs an explicit grant, and skill mutation stays withheld.
+
+**Inbox:** the default view drops patrols that found nothing, rather than hiding the entire patrol class.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.16.0)
+
 ## 2.15.0 - 2026-07-25
 
 ## Inbox filters now mean what they say
