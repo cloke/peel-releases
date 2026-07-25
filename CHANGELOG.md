@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.17.0 - 2026-07-25
+
+Corpus safety and de-hardcoded models.
+
+**Converging an analyzer corpus can no longer destroy it.** `rag.analyze` with `converge: true` cleared a repo's analysis and then rebuilt it, but the rebuild sat behind a guard that skips local analysis on overlay-fed machines. The clear was not behind that guard, so converging on such a machine wiped the corpus and reported success over an empty result. Convergence now checks first and refuses without changing anything.
+
+**A skipped analysis no longer reports as a completed one.** When a machine declines to run local analysis, the response says so and carries the reason, instead of returning "AI analysis complete" with a count of zero.
+
+**Embedding delegation is reachable across your own machines.** Triggering a swarm-wide reindex was already possible from any of your Macs, but reading or setting the delegation that decides where embedding and analysis run was not. Since that delegation is also what silently disables local analysis, a producer that had quietly become overlay-fed could only be diagnosed from a shell on it.
+
+**PR-review models moved out of the code.** Three of the four local reviewers named a model literally, repeated again in the preflight gate and the runner's required-model list. All four now resolve through the model registry, so changing a reviewer is a config edit rather than a release. Defaults are unchanged.
+
+Note the bundled defaults still use moving `:latest` tags, which resolve to whatever each machine happens to have pulled. The same role can be a 26B model on one Mac and an 8B on another while both report the same name. Pinning explicit sizes is now a config edit.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.17.0)
+
 ## 2.16.1 - 2026-07-25
 
 A patch release with two fixes: the Inbox no longer freezes the app, and cleaning up a repository's search index no longer removes the repository.
