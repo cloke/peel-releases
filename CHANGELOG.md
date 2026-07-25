@@ -17,6 +17,51 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.14.0 - 2026-07-25
+
+## Local inference problems now reach the Inbox
+
+2.13.0 added runtime health checks but they only wrote to the log and to
+`system.doctor`, so on a machine that was actually in trouble nothing was visible.
+Findings now become Inbox rows carrying a severity and the command that fixes them.
+
+Rows are deduplicated against unresolved rows rather than a time window. A machine
+that relaunches constantly is exactly the case these checks exist for, so a row per
+launch would bury the Inbox in copies of one problem. Resolving a row arms it again,
+so a real recurrence still reports.
+
+## Confirmed: quantized KV cache was crashing local inference
+
+The `inference.runtime.kvCache` warning added in 2.13.0 is no longer a hypothesis.
+Measured on a machine driving sustained local inference:
+
+| KV cache | Model loads | Runner crashes | Rate |
+|---|---|---|---|
+| `q8_0` | 218 | 31 | 14.2% |
+| `q8_0` | 438 | 55 | 12.6% |
+| default | 216 | 0 | 0% |
+
+Same workload, same Ollama version, quantized KV cache removed. `llama-server` was
+aborting inside `llama_context::decode` with libmalloc heap corruption on roughly one
+model load in eight, and stopped entirely. If you have set `OLLAMA_KV_CACHE_TYPE` to
+a quantized value, remove it. Note that `brew upgrade` and `brew services start` both
+regenerate that LaunchAgent, so any custom environment has to be re-applied after an
+upgrade.
+
+## Security
+
+Fleet trust is now an allowlist over the tool catalog rather than a denylist, so a
+newly added tool is not reachable by peers until it is explicitly granted.
+
+## Known issue
+
+This release does not fix #1754. That crash is inside Apple's executor identity
+check, reached from Apple's own frameworks, and register state across four builds
+shows the same constant bit pattern rather than the varying garbage that memory
+corruption would produce.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.14.0)
+
 ## 2.13.0 - 2026-07-25
 
 ## Local inference runtime health
