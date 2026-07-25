@@ -17,6 +17,36 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.16.1 - 2026-07-25
+
+A patch release with two fixes: the Inbox no longer freezes the app, and cleaning up a repository's search index no longer removes the repository.
+
+## The Inbox could lock the app once other Macs were working
+
+If your swarm had peers running chains, opening the Inbox could send Peel to 100% CPU and stop the interface responding. Quitting and reopening bought a minute or two before it happened again.
+
+Two things in the sidebar were fighting each other on every frame. Rendering the list created a stored database record for each run reported by another Mac, and storing a record tells the interface something changed, so it drew the list again, which created the records again. At the same time the list was writing a value it also read while drawing. Either one alone causes a redraw loop; together they saturated a core.
+
+A run happening on another Mac is now held in memory as plain data rather than written to the local database, which is the honest description of it: it is someone else's work, and this machine was never meant to keep a copy. Assembling the list also moved out of the drawing path, so it happens when the underlying runs actually change instead of on every frame.
+
+Sorting, filtering, badge counts and row selection all behave as before, including keeping your selected row when the list refreshes underneath you.
+
+This was verified against a running app with five Macs online, sitting on the Inbox, rather than by reading the code: the redraw loop is gone from the profile entirely.
+
+## Cleaning a polluted index no longer deletes the repository
+
+A repository that had absorbed its nested projects' files was being removed outright to clear the duplication. That is too blunt a remedy. Such a repository is still real, and on the store that prompted this it owned 204 of its 7,732 indexed files, including a workspace tree, CI configuration, a README and a script. Removing the row would have taken those with it, dropped the repository off your list, and required a full re-index to get any of it back.
+
+Now only the nested subtrees are stripped. The repository keeps its identity and its own files, and nothing needs re-indexing to come back.
+
+Local model identifiers also stopped being hardcoded in this path, so they follow the configured registry like everywhere else.
+
+## Upgrading
+
+Nothing to do. If you are on 2.16.0 and the Inbox has been freezing, this is the fix.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.16.1)
+
 ## 2.16.0 - 2026-07-25
 
 RAG corpus integrity.
