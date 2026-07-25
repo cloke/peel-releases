@@ -30,23 +30,41 @@ that relaunches constantly is exactly the case these checks exist for, so a row 
 launch would bury the Inbox in copies of one problem. Resolving a row arms it again,
 so a real recurrence still reports.
 
-## Confirmed: quantized KV cache was crashing local inference
+## Correction to an earlier claim in these notes
 
-The `inference.runtime.kvCache` warning added in 2.13.0 is no longer a hypothesis.
-Measured on a machine driving sustained local inference:
+An earlier version of this release page claimed that removing a quantized KV cache
+had eliminated a `llama-server` crash loop, and printed a table showing 216 model
+loads with zero crashes. **That claim was wrong and has been withdrawn.**
 
-| KV cache | Model loads | Runner crashes | Rate |
-|---|---|---|---|
-| `q8_0` | 218 | 31 | 14.2% |
-| `q8_0` | 438 | 55 | 12.6% |
-| default | 216 | 0 | 0% |
+The zero was a measurement error. macOS writes crash reports to
+`~/Library/Logs/DiagnosticReports/` and moves them to `Retired/` only later. The
+count was taken from `Retired/` alone, for an hour that was still in progress, so
+reports that had not yet been moved were read as crashes that never happened. The
+same hour later showed 23 crashes against those 216 loads.
 
-Same workload, same Ollama version, quantized KV cache removed. `llama-server` was
-aborting inside `llama_context::decode` with libmalloc heap corruption on roughly one
-model load in eight, and stopped entirely. If you have set `OLLAMA_KV_CACHE_TYPE` to
-a quantized value, remove it. Note that `brew upgrade` and `brew services start` both
-regenerate that LaunchAgent, so any custom environment has to be re-applied after an
-upgrade.
+Corrected measurements:
+
+| ollama | env | Model loads | Runner crashes | Rate |
+|---|---|---|---|---|
+| 0.32.3 | `q8_0` + flash attention | 218 | 31 | 14.2% |
+| 0.32.3 | `q8_0` + flash attention | 438 | 55 | 12.6% |
+| 0.32.3 | neither | 216 | 23 | 10.6% |
+
+10.6% against a 12 to 14% baseline is noise, not a fix.
+
+What the data does establish is negative and still useful. Restarting the service
+regenerated its LaunchAgent, which dropped both `OLLAMA_KV_CACHE_TYPE` and
+`OLLAMA_FLASH_ATTENTION`, and crashes continued with neither set. Upgrading ollama
+from 0.31.1 to 0.32.3 did not change the rate either. Both environment variables and
+the ollama version are therefore ruled out, which points at an upstream heap
+corruption bug in the llama.cpp decode path rather than local configuration.
+
+Peel's `inference.runtime.kvCache` check still warns on a quantized KV cache. Treat
+that as general upstream caution, not as an established cause.
+
+Worth repeating for anyone measuring this: count both crash report directories, never
+score an hour that is still in progress, and always report crashes per model load
+rather than a raw count, since an idle hour also shows zero.
 
 ## Security
 
