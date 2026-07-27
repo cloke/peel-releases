@@ -17,6 +17,33 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.0 - 2026-07-27
+
+## Shared indexes stay on main
+
+Peel now builds shared RAG indexes from an isolated `origin/main` snapshot.
+Your feature branch, uncommitted edits, generated files, and local RAG settings
+cannot change the corpus shared with the swarm.
+
+## Repair a mismatched index
+
+The repository RAG menu now offers **Replace with full index from <peer>**
+when a peer is available. Use it to replace an older or incomplete local index
+instead of applying another overlay. Local index actions are now clearly named
+**Update from main** and **Rebuild from main**.
+
+## More focused review work
+
+Inbox triage is easier to scan and act on, with clearer filtering and a better
+view of parallel worktree activity.
+
+## Safer agent commands
+
+Peel further tightens command handling for remote and automated agent work,
+keeping terminal execution constrained to validated argument boundaries.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.0)
+
 ## 2.18.1 - 2026-07-27
 
 ## Automatic updates actually default on
