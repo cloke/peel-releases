@@ -17,6 +17,26 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.18.1 - 2026-07-27
+
+## Automatic updates actually default on
+
+A machine whose update preference was never touched ran as if it were
+explicitly set to Never, while the Settings picker displayed Daily. The cause
+was an unset preference reading as the numeric value for Never, which also
+made the app overwrite Sparkle's own "automatically check" setting to off on
+every launch, so ticking that checkbox appeared not to persist.
+
+An untouched preference now means what the UI says: daily unattended installs.
+An explicit Never remains Never. This is the last release that machines with
+untouched preferences need to install by hand.
+
+## Run cleanup and nested repositories
+
+Run cleanup and nested repository resolution fixes from parallel work.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.18.1)
+
 ## 2.18.0 - 2026-07-27
 
 ## Crash reports over the swarm
