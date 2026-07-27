@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.1 - 2026-07-27
+
+- Manual RAG pulls now recover immediately when a peer becomes reachable after a brief interruption.
+- RAG transfer errors show recovery status and the remaining cooldown instead of a generic timeout message.
+- The Swarm traffic map uses the available pane more effectively and adds a compositor-backed scene option.
+- Updated swarm tools and the published plugin catalog for the current Iroh transport.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.1)
+
 ## 2.19.0 - 2026-07-27
 
 ## Shared indexes stay on main
