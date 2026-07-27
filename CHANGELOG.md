@@ -17,6 +17,48 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.18.0 - 2026-07-27
+
+## Crash reports over the swarm
+
+Two new read-only tools let one Peel machine retrieve Apple crash reports from
+another without remote shell access or arbitrary filesystem reads.
+
+`diagnostics.crash-reports.list` returns recent `.ips` and `.crash` reports for a
+process (default Peel) from the diagnostic reports folders as opaque report ids.
+`diagnostics.crash-reports.read` returns one report's UTF-8 content plus a
+SHA-256 for provenance, capped at 512 KiB by default and 2 MiB hard. The reader
+takes no filesystem paths, refuses symlinks and traversal, and does its file
+I/O off the main actor.
+
+These are sensitive-data tools. Machines signed into the same account reach them
+through fleet trust; anyone else needs an explicit per-peer grant. A new
+crash-diagnostics skill documents the retrieval and symbolication workflow.
+
+## Member revocation actually removes the machines
+
+Revoking a swarm member now runs through an authenticated Cloud Function with
+transactional role checks that deletes the membership and every worker
+registration the member owns. Owners can revoke anyone; admins can revoke only
+strictly lower roles, enforced server side. A Firestore delete trigger acts as a
+backstop for memberships removed directly from the console. The backing function
+and rules are deployed.
+
+## Peer identity through reconnects
+
+Machine names carried on Iroh heartbeats now survive worker state transitions.
+A peer that dropped offline previously lost its display name and showed a raw
+node id until the next identity delivery. The per-heartbeat capability rescan
+also now fires only when a heartbeat first delivers a peer's identity, instead
+of on every beat from every peer.
+
+## Known issue
+
+The crash on long-running nodes (#1754) is unchanged: an Apple runtime fault,
+documented on the issue with a controlled experiment and register analysis.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.18.0)
+
 ## 2.17.0 - 2026-07-25
 
 Corpus safety and de-hardcoded models.
