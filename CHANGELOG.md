@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.4 - 2026-07-28
+
+Inbox is now an action brief instead of an inventory dump: dependency-update pull requests are grouped by repository and next step, lower-priority work stays behind Browse all, and completed agent output opens as a concise Decision Brief with raw output still available.
+
+Knowledge now leads with the answer and an honest trust state. Author estimates, jury evidence, contested tallies, provenance, and locators are clearly separated and progressively disclosed.
+
+Swarm admins can choose a fleet RAG source in one click. That worker defines canonical artifact identity, while another online worker may serve an overlay only when its nonempty hash matches exactly. Local-only and push-only safeguards remain hard boundaries.
+
+This release also fixes the analytics crash reported on July 28 by preventing blank dynamic Firestore field names from reaching the SDK.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.4)
+
 ## 2.19.3 - 2026-07-28
 
 - Push-only RAG sources now keep Update and background maintenance local instead of trying to pull an overlay from the swarm.
