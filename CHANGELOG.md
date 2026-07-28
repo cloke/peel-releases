@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.2 - 2026-07-28
+
+- Local AI models now stay off until you explicitly enable them. Existing background RAG processing choices reset to Manual after this update. Peel pulls a usable remote artifact before considering local indexing.
+- Inbox is more action-oriented, with stable selection, focused remediation bundles, type-aware empty states, and useful cross-machine run details.
+- Knowledge is retrieval-first, removes repeated detail text, and quarantines unsafe universal entries created by automation.
+- RAG health now separates actionable work from raw inventory and reports more trustworthy counts.
+- Repository Fleet, Model Lab, Worktrees, Boards, Analytics, and Templates use space more effectively on compact Macs.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.2)
+
 ## 2.19.1 - 2026-07-27
 
 - Manual RAG pulls now recover immediately when a peer becomes reachable after a brief interruption.
