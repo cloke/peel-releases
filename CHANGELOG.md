@@ -17,6 +17,14 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.3 - 2026-07-28
+
+- Push-only RAG sources now keep Update and background maintenance local instead of trying to pull an overlay from the swarm.
+- The RAG screen makes the source role explicit with **Serving overlays** and removes pull controls that do not apply.
+- Policy blocks now explain the machine's Push-only or Pull-only role instead of reporting a misleading peer connectivity failure.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.3)
+
 ## 2.19.2 - 2026-07-28
 
 - Local AI models now stay off until you explicitly enable them. Existing background RAG processing choices reset to Manual after this update. Peel pulls a usable remote artifact before considering local indexing.
