@@ -17,6 +17,14 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.6 - 2026-07-29
+
+- Land swarm contract and model authority cores: swarm leadership and the model catalog now write to a shared, signed source of truth instead of each machine guessing independently.
+- Rightsize instruction layer and MCP tool schemas for Claude 5: trimmed and re-tuned CLAUDE.md and MCP tool schemas for the new model generation.
+- Finish model authority Phase 3: call sites across the app now read models through the catalog, with the concrete registries made internal implementation detail.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.6)
+
 ## 2.19.5 - 2026-07-29
 
 Swarm peers now recover more cleanly from reconnects. Peel waits for a fresh, real Iroh heartbeat before starting background ledger and swarm-log convergence, so stale registry state cannot trigger a large sync.
