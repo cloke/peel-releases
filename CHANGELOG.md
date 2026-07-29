@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.7 - 2026-07-29
+
+- Review dependency update bundles directly in the Inbox with grouped pull requests, risk context, and plan details in one place.
+- Run the Knowledge jury with Claude Sonnet 5 through your signed-in Claude CLI, even when the bundled model catalog has not caught up yet.
+- Keep RAG recall budgets and vector search consent aligned with the query encoding plan, with clearer behavior when remote embedding is unavailable.
+- Improve navigation, workflow cards, filtering, Knowledge details, and accent readability across the app.
+- Harden the shared build cache and MCP schema checks so stale products and contract drift fail visibly.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.7)
+
 ## 2.19.6 - 2026-07-29
 
 - Land swarm contract and model authority cores: swarm leadership and the model catalog now write to a shared, signed source of truth instead of each machine guessing independently.
