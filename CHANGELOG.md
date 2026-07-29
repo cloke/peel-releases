@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.5 - 2026-07-29
+
+Swarm peers now recover more cleanly from reconnects. Peel waits for a fresh, real Iroh heartbeat before starting background ledger and swarm-log convergence, so stale registry state cannot trigger a large sync.
+
+A single stale or flapping machine can no longer occupy half of the swarm's convergence capacity. Interactive commands keep their independent lane, while background convergence allows one active operation per peer.
+
+Reconnect-triggered ledger synchronization is now single-flight and cancellation-aware. Replacement sessions stop older full-state pipelines instead of stacking duplicate chunked sends.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.5)
+
 ## 2.19.4 - 2026-07-28
 
 Inbox is now an action brief instead of an inventory dump: dependency-update pull requests are grouped by repository and next step, lower-priority work stays behind Browse all, and completed agent output opens as a concise Decision Brief with raw output still available.
