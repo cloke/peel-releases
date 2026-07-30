@@ -17,6 +17,67 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.20.0 - 2026-07-30
+
+Peel can now tell you whether your agents are actually getting better.
+
+Until this release, everything Peel measured was an input: files indexed, chunks embedded, megabytes synced. None of it answered the question that matters. This release adds the other half.
+
+## Every run is now on the record
+
+Peel writes one row per agent run, whatever executed it. Not just its own chains: Claude Code, Codex, and Copilot sessions are harvested and land in the same ledger, so "what did this machine actually do this week" spans every tool you use rather than only the ones Peel drove.
+
+Each row carries the device, repo, commit, task type, gate outcomes, grounding score, wall clock, and real cost. Gate results are three-valued, so a skipped test is never mistaken for a passing one.
+
+## The scorecard maintains itself
+
+The model scorecard was a document somebody updated by hand, and its data was wrong in a way that proved the measurement was off rather than merely stale. Four models tied at exactly 100.0, and one scored 100 overall while scoring 0 on PR review.
+
+It is now generated. Fixtures score whether a model produced the right artifact rather than whether its prose reads well, and closed-set tasks give no partial credit, so fluent text that never commits to an answer scores zero. The old table's failure is now arithmetically unreachable, not merely unlikely.
+
+When nothing has been measured, the scorecard says so. It shows "unmeasured" with a reason, never a zero.
+
+## Agents learn from what already happened here
+
+Three new sources of judgement, all derived from your own repository rather than from generic training:
+
+**Failure memory.** When the same file has failed its build or test gate more than once, the next agent about to touch it is told so at planning time, instead of being left to run a search it would never think to run.
+
+**House rules.** Every review comment that led to a follow-up commit is a labeled correction. Peel harvests them into checkable rules and runs them as a pre-flight lint on the next agent diff, citing the original comment when one fires.
+
+**Your repo as the benchmark.** Merged pull requests become eval tasks with the real diff as the reference answer, so model choice is measured against your codebase rather than someone else's.
+
+## A faster, more truthful verification loop
+
+`verify.fast` returns a structured verdict rather than a wall of build output: findings with file, line, and the failing assertion. A phase that did not run says so with a reason, and a test suite that executed nothing reports as skipped rather than passed. The answer is yes, no, or unproven, because a boolean cannot express "nobody checked".
+
+Builds themselves got 39% faster for a small change. The cause turned out to be that a single per-build environment variable was invalidating SwiftPM's compiled-manifest cache, forcing all 73 package manifests to recompile every time.
+
+## Runs survive interruption
+
+A long run can now be corrected mid-flight and resumed from its last completed step, so a crash, a quit, or an app update no longer destroys work in progress. Steps are keyed by their definition, so editing a step re-runs from that point and everything before it replays.
+
+## The swarm can compete, not just share
+
+Idle machines can run competing attempts at the same step, each nudged toward a different approach, ranked on mechanical evidence: does it build, do the affected tests pass, is it grounded in real files, how large is the diff. No model's opinion of its own work is consulted.
+
+If every attempt fails its gates, that is reported as a failed round. A best-of-N that always returns something is a ranking of failures.
+
+## Honesty, made mechanical
+
+A new check runs in CI for a specific class of bug: code that reports success over an empty or unverified result. A sweep of the codebase found and fixed 29 of them.
+
+Two were serious. One could replace the shared model-approval record with a single entry when a read failed, and report success. The other allowed a transient network error during pull request review to be read as "nobody requested changes", which could let a change merge over a human's objection. Both now fail safe.
+
+## Also in this release
+
+- Auto-merge blocks when it cannot verify its checks rather than assuming they passed, including when a pull request has no CI results at all.
+- Review verdicts that cannot be parsed are recorded as unparsed rather than defaulting to approval.
+- Chain step durations are recorded as numbers again, having been silently absent from every run.
+- An undecodable skills file no longer silently discards the skills stored in it.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.20.0)
+
 ## 2.19.8 - 2026-07-30
 
 Peel 2.19.8 — agents get told the truth.
