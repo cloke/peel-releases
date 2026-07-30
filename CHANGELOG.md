@@ -17,6 +17,34 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.19.8 - 2026-07-30
+
+Peel 2.19.8 — agents get told the truth.
+
+Most of this release fixes cases where Peel reported something that wasn't so.
+
+**Navigation and verification**
+- `ui.navigate` no longer reports failure for navigations that actually landed. The legacy compat write it made before navigating was itself a navigation, so the app moved to the wrong hub and the verifier honestly described that. Repo deep links now apply once instead of re-applying on every index rebuild.
+- `screenshot.capture` refuses to return a blank image as a success. A window whose content has never rendered (a background relaunch under a sleeping display) now produces an explicit `windowNeverRendered` error naming the cause and the state-based checks that still work.
+- The Home swarm map renders in occluded captures instead of a void.
+
+**Inbox and visual language**
+- One color grammar: blue means interactive, green passed, red failed, yellow in flight, orange waiting on you, everything else quiet. Status chips share one calm capsule whose icon carries the state.
+- The accent color is defined for the first time — every `.tint(.accentColor)` in the app had previously been a silent no-op.
+- The Chains card counts what is actually running; awaiting-review work is surfaced as review work.
+- Dependency pull requests group into something you can review from, with wrapping chips and intent-derived template icons.
+
+**Retrieval and the swarm**
+- Query embedding budgets and local-model consent now follow the resolved execution plan, so an overlay-fed Mac gets semantic recall through its delegated peer instead of timing out by construction.
+- A peer that denies a tool by policy opens a cooldown breaker instead of being re-dialed every query.
+- Multi-word machine names stop being truncated; a mirror directory hash no longer appears where a repo name belongs.
+
+**Build and tooling**
+- The coordinated build cache verifies products, not just its stamp, and Peel is only stopped once its replacement build is verified.
+- The knowledge detail pane keeps sentences' final punctuation.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.19.8)
+
 ## 2.19.7 - 2026-07-29
 
 - Review dependency update bundles directly in the Inbox with grouped pull requests, risk context, and plan details in one place.
