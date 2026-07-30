@@ -17,6 +17,36 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.20.1 - 2026-07-30
+
+Repository Fleet now says exactly what it means when knowledge moves between your Macs.
+
+## Choose who produced the knowledge
+
+Peel now separates the machine that generated an artifact from the machine that delivers its bytes. Choose **Any compatible producer**, name a specific producer such as Bender, or keep a repository on **This Mac only**.
+
+When you name a producer, Peel accepts that machine's artifact or an exact content-addressed replica. It will not silently substitute knowledge generated somewhere else.
+
+## Settings are clearly scoped
+
+Repository and workspace rows now show both the resolved value and where it came from. Labels such as **This Mac default**, **Workspace**, and **Swarm contract** replace the ambiguous “Inherited” wording.
+
+Background work is shown separately from knowledge producer selection. You can accept knowledge produced by Bender while keeping automatic model work off on this Mac.
+
+## Jury participation is your choice
+
+Each Mac now has an off-by-default **Allow jury work from my other Macs** preference under Settings → Swarm. Repository Fleet shows which machines are available for distributed Knowledge review and which need an update or have chosen not to participate.
+
+A Mac that has not opted in refuses remote jury requests. Manual model-jury work on that Mac still works normally.
+
+## Safer fleet routing
+
+Pull-only machines are no longer offered as producers or delivery sources. The repo-level pull menu now calls its machine preference **Preferred delivery**, making clear that it affects transport rather than producer identity.
+
+The same producer, delivery, and jury status is available to agents through Peel's MCP tools.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.20.1)
+
 ## 2.20.0 - 2026-07-30
 
 Peel can now tell you whether your agents are actually getting better.
