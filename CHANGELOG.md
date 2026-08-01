@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.20.2 - 2026-08-01
+
+## Lower idle CPU from swarm sync
+
+Peel was burning significant main-thread CPU on routine swarm traffic — up to 47% during a single 22-hour session. Ledger payload verification now happens off the main thread, and gossip rebroadcasts that every receiving peer was already rejecting have been removed instead of resent.
+
+You should see less fan noise and better battery life on Macs that stay connected to a swarm.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.20.2)
+
 ## 2.20.1 - 2026-07-30
 
 Repository Fleet now says exactly what it means when knowledge moves between your Macs.
