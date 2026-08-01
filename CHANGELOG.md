@@ -17,6 +17,31 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.20.3 - 2026-08-01
+
+This release is about energy. A fleet-wide sync storm could keep Peel busy decoding, verifying, and re-persisting ledger state even while idle, which macOS rightly flagged as significant energy use. 2.20.3 completes the traffic diet started in 2.20.2.
+
+### Swarm traffic diet
+- The idle ledger is now quiet: counter-only writes are throttled and delta broadcasts coalesce instead of firing per change (#2019)
+- Anti-entropy repairs only the buckets that actually diverge instead of exchanging full state (#2029)
+- Presence beats on demand: every beat while working, slow cadence when idle (#2030)
+- Worker status refreshes are change-gated instead of rebuilt on every beat (#2022)
+- The audit log rolls up no-op merge receipts, writes at background priority, and caps itself at 64 MB (#2026)
+- Swarm Traffic gained an efficiency strip so you can watch the diet working, and its header no longer crushes in narrow panes (#2023, #2025)
+
+### Invites and swarm security
+- An invite names exactly one person; redemption is bound to the named invitee (#2032)
+- Invite refusals explain themselves without leaking policy internals, signed in or not (#2033, #2037)
+- Cross-swarm key divergence is refused rather than merely audited, and reinstall rotation is distinguished from it (#2028, #2031)
+- Revoked peers lose their sessions immediately; key rotations are audited; relayed pulses prove provenance (#2020)
+- Remote tool calls are scoped to granted repos and workspaces (#2027)
+
+### Fixes
+- Update status reports an unresolvable baseline honestly instead of claiming zero stale peers (#2024)
+- TestFlight detection probes the receipt file directly instead of an API deprecated in macOS 15 (#2035)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.20.3)
+
 ## 2.20.2 - 2026-08-01
 
 ## Lower idle CPU from swarm sync
