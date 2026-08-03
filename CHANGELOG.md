@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.22.1 - 2026-08-03
+
+## Bounded memory during swarm convergence
+
+- Peel now pauses background ledger convergence before process memory can grow into a machine-wide incident. Sync resumes automatically after memory recovers.
+- Large swarm ledgers travel in a few bounded frames instead of dozens of tiny frames that each repeated decode, signature verification, and merge work.
+- Incoming ledger work now has strict per-peer frame and byte limits, preventing a noisy or reconnecting peer from building an unbounded in-memory backlog.
+- Repeated verification of the same immutable Knowledge block is reused safely across repair rounds while remaining bound to the exact payload, signature, and author key.
+
+No user action is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.22.1)
+
 ## 2.22.0 - 2026-08-03
 
 ## Clear leadership without giving up peer-to-peer operation
