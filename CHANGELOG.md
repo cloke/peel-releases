@@ -17,6 +17,17 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.21.0 - 2026-08-03
+
+Peel 2.21.0 puts asset generation where it belongs: on the swarm.
+
+- Asset generation now dispatches to a heavy swarm node by default. Running a backend on the requesting Mac requires an explicit `node:"local"`, and a machine marked model-free (`models.allowLocalModelLoad` off) refuses local runs with a clear pointer to the swarm instead. No more surprise FLUX sessions on a laptop.
+- Dispatch is honest about targets. A `workerId` that is not connected fails the job and names the connected workers rather than quietly running the work on a different machine.
+- Exact-source image conditioning: `asset.image.generate` can condition on one completed generation with a pinned SHA-256, bounded deterministic preparation, and the full recipe recorded in provenance. Remote conditioning and image-to-mesh reconstruction must target the worker that produced the source.
+- FLUX prompt handling got stricter and better. Geometry prompts adhere more reliably, and unsupported parameters such as negative prompts are rejected up front instead of being silently ignored.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.21.0)
+
 ## 2.20.3 - 2026-08-01
 
 This release is about energy. A fleet-wide sync storm could keep Peel busy decoding, verifying, and re-persisting ledger state even while idle, which macOS rightly flagged as significant energy use. 2.20.3 completes the traffic diet started in 2.20.2.
