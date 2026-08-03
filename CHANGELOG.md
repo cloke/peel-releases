@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.22.0 - 2026-08-03
+
+## Clear leadership without giving up peer-to-peer operation
+
+- Every machine remains a peer. Swarm contracts can now name an ordered leader and deputy while keeping leadership separate from repository and model duties.
+- Swarm leaders can send durable messages and propose a knowledge producer for another Mac. The receiving user reviews the plan locally before anything changes.
+- Repository Fleet now distinguishes the contract embedding standard from active producer conflicts and old publication history, making mixed embedding warnings actionable.
+- Repository discovery now keeps real local checkouts ahead of canonical mirrors and recognizes nested checkouts more reliably.
+- Routine swarm and GPU ledger updates no longer rebuild the knowledge corpus, reducing idle work and unnecessary embedding churn.
+- Leader, Deputy, Peer, Producer, and Consumer labels replace the old overlapping role vocabulary throughout Peel and its agent tools.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.22.0)
+
 ## 2.21.0 - 2026-08-03
 
 Peel 2.21.0 puts asset generation where it belongs: on the swarm.
