@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.22.5 - 2026-08-04
+
+Peel 2.22.5 closes out the memory-growth work from the 2.22.x line: the swarm transport runaway found after the 2.22.4 rollout is fixed at its root, and connector subprocess output is now bounded end to end.
+
+- Fixed a swarm networking runaway where a peer holding more than one QUIC connection could enter an exponential path-negotiation loop, consuming tens of gigabytes of memory within the hour. Peel now enforces a single connection per peer, removing the precondition entirely.
+- Bumped the pinned iroh transport crate to 1.0.3.
+- Connector subprocess pipes are now memory-bounded. stderr streams to the log line by line as it arrives instead of accumulating until the process exits, an oversized protocol line is dropped with an explicit log entry instead of buffering without bound, and every evicted byte is counted and surfaced rather than silently discarded.
+
+A misbehaving or wedged connector can no longer grow Peel's footprint for as long as it runs, and its final output before a crash now reaches the log.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.22.5)
+
 ## 2.22.4 - 2026-08-04
 
 Peel 2.22.4 fixes a swarm startup priority inversion discovered during the 2.22.3 fleet rollout.
