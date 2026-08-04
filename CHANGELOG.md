@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.22.4 - 2026-08-04
+
+Peel 2.22.4 fixes a swarm startup priority inversion discovered during the 2.22.3 fleet rollout.
+
+- Identity challenge and response traffic now uses a dedicated critical-control lane, so heartbeat churn and RAG reachability preflights cannot leave a peer connected but unverified.
+- Failed identity frames retry on a small bounded schedule using the same nonce; retries do not duplicate RAG data or create an unbounded queue.
+- RAG request metadata, convergence messages, and bulk content-addressed blobs remain on their existing lower-priority bounded paths.
+
+This preserves the security gate for sensitive remote commands while allowing trusted Auto-update peers to recover cleanly after a restart.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.22.4)
+
 ## 2.22.3 - 2026-08-04
 
 ## Automatic fleet updates report the right preference
