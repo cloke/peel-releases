@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.22.3 - 2026-08-04
+
+## Automatic fleet updates report the right preference
+
+- A machine using the displayed Daily default now advertises Daily to the swarm instead of being mistaken for Never.
+- Explicit Never and Weekly choices remain unchanged and are still respected by fleet-wide update requests.
+- Sparkle configuration and swarm capability gossip now use one shared preference resolver, preventing the two paths from drifting again.
+
+This is a focused follow-up to 2.22.2. No user action is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.22.3)
+
 ## 2.22.2 - 2026-08-04
 
 ## Memory stays bounded during startup and swarm sync
