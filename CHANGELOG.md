@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.22.2 - 2026-08-04
+
+## Memory stays bounded during startup and swarm sync
+
+- Peel now coalesces repeated RAG inventory work at startup and applies large incoming bundles one at a time instead of multiplying the same scan and decode work.
+- RAG bundles now stream directly to disk, and integrity checks run off the UI thread without loading the full artifact into memory.
+- Automatic RAG pulls pause while memory pressure is high and resume after recovery. Memory monitoring also starts earlier, before swarm convergence begins.
+- Retired Knowledge keeps the clocks needed to prevent stale resurrection without retaining the full rejected payload in the active ledger.
+
+These changes remove the startup and convergence amplification that could drive Peel far beyond the machine's physical memory. No user action is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.22.2)
+
 ## 2.22.1 - 2026-08-03
 
 ## Bounded memory during swarm convergence
