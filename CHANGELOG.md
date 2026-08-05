@@ -17,6 +17,51 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.23.0 - 2026-08-05
+
+## Fleet self-diagnosis
+
+The RAG fleet scorecard now catches two failures it used to report nothing about.
+
+**No producer assigned.** When the fleet replicates repositories that no swarm
+contract or policy names a producer for, the scorecard says so and names the
+online machine best placed to take the job, with the `swarm.contract.publish`
+repair one preview away. Previously an empty contract looked identical to a
+healthy one: with nobody assigned, every publisher's vector space was treated as
+equally authoritative, which is what produced "assigned producers publishing
+incompatible spaces" for a fleet with zero assignments.
+
+**Off-standard publications.** Published registry rows are now compared to the
+fleet's declared embedding standard regardless of whether the machine that
+published them is awake. A publication does not become correct when its author
+closes the laptop, and stale-registry pruning leaves the row in place while that
+worker identity is still alive. A publisher that is back online on the standard
+is treated as stale history awaiting a republish, not as a disagreement.
+
+Both appear in the Repository Fleet topology rail (Authority and Quality) and in
+`rag.fleet.scorecard`, which gains `unassignedProducerCount` and
+`offStandardPublicationCount` in its summary view so neither hides behind a bare
+error count.
+
+## Swarm
+
+- RAG provider settings collapse into a single role concept instead of separate
+  dials.
+- Worker-name resolution is now loud on eviction, ambiguity, and no-target
+  instead of failing quietly.
+- Fleet memory watch names duplicate-connection peers, tracks heartbeat
+  footprints, and escalates sustained growth.
+
+## Performance
+
+- The RAG source-search projection is reused when the corpus has not changed.
+
+## Removed
+
+- The legacy WKWebView-backed product manual view.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.23.0)
+
 ## 2.22.5 - 2026-08-04
 
 Peel 2.22.5 closes out the memory-growth work from the 2.22.x line: the swarm transport runaway found after the 2.22.4 rollout is fixed at its root, and connector subprocess output is now bounded end to end.
