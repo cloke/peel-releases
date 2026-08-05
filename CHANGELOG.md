@@ -17,6 +17,77 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.24.0 - 2026-08-05
+
+## One role per machine, shown where you need it
+
+A machine's RAG posture used to be assembled from three independent dials in
+three different places, and one of them had no interface at all. Nothing showed
+the resolved answer to the two questions an operator actually asks: what does
+this machine provide, and where does this repository pull from.
+
+Both questions now have one answer each, in one place.
+
+**Machines roster.** Repository Fleet's inspector gains a row per machine
+showing what it provides. This Mac's row is a role picker — Producer, Mirror, or
+Consumer — that writes the sync direction and the background-work default
+together, rather than leaving you to assemble three settings by hand and
+discover later that they disagree.
+
+Serving is a single machine-wide switch, so a machine cannot mirror one
+repository and not another. That is exactly why the serve control lives on the
+machine row and not in the repository table.
+
+**A machine is never rounded to the nearest role.** Settings that match no named
+role read as **Custom** and list what the machine actually does. A role is
+matched on consequences rather than exact values, so a producer left on
+bidirectional still serves, builds, and publishes, and still reads as Producer.
+
+**Peers report only what they advertise.** A peer publishes its sync direction
+and nothing else — its background-work policy and publish list are readable only
+on the machine that owns them. So a peer shows *Serves artifacts*, *Serves
+nothing*, or *Not reported*, never a role name assembled from settings nobody
+measured. When repositories name a peer as their producer and its sync direction
+prevents it from serving, the row says so and names the count. That specific
+mistake — a machine set to pull-only while the fleet still routes producer work
+to it — served nothing, silently, and was invisible at the surface that reported
+it.
+
+## Repository knowledge says which scope decided it
+
+The repository RAG card now shows resolved values rather than duplicate
+controls:
+
+- **This Mac's role**, read-only, with the resolved pull direction beneath it:
+  *"Pulls from <machine> · synced 12m ago, inherited from <workspace>"*. The
+  headline names the machine that would actually deliver, not the producer the
+  policy names — those diverge exactly when something is wrong, and the tooltip
+  says so when they do.
+- **Background-model inheritance.** The picker stays, because that setting is
+  genuinely per repository, but it now says which scope produced the current
+  value and offers to hand the repository back to that scope instead of only
+  ever creating an override. Where a swarm contract or a checked-in
+  configuration caps the level, the menu offers only the values you can actually
+  reach and names the cap; it used to offer higher ones that wrote a preference
+  and changed no behavior.
+- **Producer conflicts** are called out on the repository that causes them: when
+  a repository names this Mac as its producer and this Mac cannot fill the role,
+  the card explains why in the resolver's own words.
+
+## Two settings moved to the scope they act on
+
+**Automatic pulling** and **preferred delivery** each write a single setting for
+the whole Mac, but they used to render inside an individual repository's card.
+Changing either one "for this repository" changed it for every repository, and
+nothing on screen said so. Both now live in Repository Fleet → Machines. The
+repository card shows their resolved values read-only, each naming its scope.
+
+LAN and WAN preferred delivery remain independent, and a preference pointing at
+a machine that is currently offline keeps naming that machine rather than
+quietly reading as automatic.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.24.0)
+
 ## 2.23.0 - 2026-08-05
 
 ## Fleet self-diagnosis
