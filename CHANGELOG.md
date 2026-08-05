@@ -17,6 +17,65 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.25.0 - 2026-08-05
+
+## Peel stops holding gigabytes it does not need
+
+Syncing a RAG artifact could push Peel past four gigabytes of physical memory,
+far enough to trip its own memory guard and pause swarm work until the pressure
+cleared. The cause was not the size of the index. It was how the index was
+checked.
+
+Every file in an artifact bundle is verified by SHA256 before it is applied, and
+one of those files is `rag.sqlite` — gigabytes on a machine that indexes a lot.
+The importer read each file **whole** into memory purely to hash it, then threw
+the bytes away. Worse, the helper that was supposed to hash in fixed-size chunks
+was not actually streaming: `FileHandle` hands back memory the system reclaims
+only when a pool drains, and on a background task nothing ever drained one. It
+read in chunks and kept every chunk, which costs exactly as much as reading the
+whole file at once.
+
+Both paths now stream for real. Hashing a 2.4 GB index went from **2347 MB of
+peak memory to 3.8 MB**, for a byte-identical digest at the same speed. The
+integrity check is unchanged; only the cost of running it is.
+
+## Launch stops rebuilding an index that never changed
+
+Peel keeps a fast read-only projection of the search corpus, and rebuilds it
+when the corpus is newer. That comparison could never come out in favour of
+reuse, so every launch rebuilt from scratch — a full copy of every chunk in a
+multi-gigabyte database, on a corpus that had not changed.
+
+The rebuild was invalidating itself. It finished by asking SQLite to analyse its
+work, and the unscoped form of that request analyses *every* attached database,
+including the source it had just read. That wrote to the source and moved its
+timestamp past the projection's, so the next launch always concluded the corpus
+was newer. Scoping the request to the projection alone leaves the source
+untouched, and reuse works as intended.
+
+## Pointless overlay transfers stop before they start
+
+When two machines have indexed a repository at different commits, their overlay
+data cannot line up: the file hashes will not match and nothing will apply. Peel
+discovered this the expensive way — transferring the whole overlay, comparing
+commits at the end, applying zero rows, and discarding the result. On one
+machine that was eight repository pairs repeating the same wasted transfer.
+
+Machines now publish the commit they have each repository indexed at, so a pull
+that cannot possibly apply is declined before any data moves. The check is
+deliberately conservative: it only declines when **both** machines have reported
+a commit and the two differ. A machine that reports nothing is treated as
+unknown, never as diverged, so this can only skip transfers that were going to
+apply nothing.
+
+Nothing is parked or remembered. The verdict is recomputed from what machines
+currently report, so reindexing either side resumes syncing on its own. Skipped
+pairs are listed in swarm diagnostics with both commits and the fix — reindex
+both machines at the same commit — so a repository that is not syncing says so
+instead of going quiet.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.25.0)
+
 ## 2.24.0 - 2026-08-05
 
 ## One role per machine, shown where you need it
