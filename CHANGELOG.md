@@ -17,6 +17,118 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.26.0 - 2026-08-07
+
+Three audit passes over the last week went looking for memory that never comes
+back, work that lands on the main thread, and success reported as failure. They
+found more than we expected. This release is what came out of that, plus video
+generation.
+
+## Long-running machines stop accumulating memory
+
+A Peel process that had been up for 21 hours was holding 2.19 GB in suspended
+task stacks and another 2.13 GB in repository listings it had no further use
+for. Two separate causes, both now fixed.
+
+Inbound network channels were handled in a task group that is never destroyed,
+because the stream feeding it never ends. A plain group holds onto every child
+until the group itself goes away, so every channel handled since launch stayed
+charged to the process at about 1,310 bytes each. At roughly 27 channels a
+second that adds up fast. Switching to a group that frees each child as it
+finishes took a 200,000-child probe from 261.4 MB down to 11.1 MB.
+
+The other cause was a queue of waiters that had no way to identify any single
+one of them. A cancelled waiter was never resumed and never removed, and a
+suspended task holds its entire stack frame, so each one pinned a full
+21-repository listing. Waiters are now keyed by id and drained on cancellation.
+A probe that cancels 20,000 parked waiters leaves the queue at zero where it
+used to leave 20,000.
+
+A third instance of the same pattern turned up in the inference queue during a
+later pass and got the same fix.
+
+## The interface stops freezing
+
+The worst stall we found was several seconds long. Chain runs ask for impact
+analysis on the files they are about to touch, and that question ran a
+full-corpus database join on the main thread. One scan is about two thirds of a
+second against a 2.4 GB store. It ran once per file hint, so a step naming ten
+files froze the app for over six seconds. It now scans once in the background
+and matches every file against that single result.
+
+Three smaller stalls went with it. A redaction pass was recompiling eleven
+regular expressions on every call, which cost about 170 ms per knowledge
+rebuild and ran on the main thread for every line a plugin wrote to standard
+error. The command palette was re-ranking the full 300-tool catalog on every
+view pass, about 10 ms per keystroke, two thirds of it duplicate work. Copying a
+repository index between branches held the main thread for 1.42 seconds.
+
+Parsing a run's review output was also happening several times per view pass, at
+11 to 13 ms each on a real 40 KB output. It is now computed once.
+
+## Semantic knowledge search works again
+
+Peel could not answer a semantic knowledge query, and any manual attempt to fix
+it was undone within the hour.
+
+The background rebuild computed its work set against the current embedding
+provider, but its fallback path stamped rows with a different model name. Every
+row therefore looked stale on the next pass, so the rebuild re-embedded the
+entire corpus every time and never converged. That same stamp is what the search
+side rejects, so all 623 rows on the live store were unreadable to it. The
+fallback now derives its work set from the model it is actually about to stamp.
+
+## Sync stops calling success a failure
+
+Two normal outcomes were being reported as errors. An overlay sync that carries
+no files is the ordinary answer to "nothing has changed since you last asked",
+and it was being surfaced as a failure. It now reports as up to date.
+
+Machines that deliberately index repositories they do not check out were in a
+worse spot: their imports worked, wrote real data, and were marked failed
+anyway, with a summary that said in the same breath that the overlay had landed.
+Having no local checkout is not the same as having applied nothing, and the two
+cases are now told apart.
+
+Automatic pull retries decide from the typed failure reason rather than by
+reading error text, so a transient failure retries and a permanent one does not.
+
+## Connectors that die get noticed
+
+In sandboxed builds, which includes TestFlight, nothing ever told the app that a
+connector's process had exited. The app learns about it by the output stream
+ending, and that stream simply went quiet instead. A dead connector kept
+reporting itself ready, restart policies never fired, and callers kept routing
+work to it. The exit now crosses the process boundary, carrying the real exit
+code so that restart-on-failure can tell a crash from a clean shutdown.
+
+Three more went with it. A network proxy leaked a file descriptor and a live
+connection on every tunnel it closed. Reopening a window in background mode
+re-ran the startup path against the same object, duplicating connector
+subprocesses and menu bar items with nothing to tear them down. And a streamed
+subprocess that wrote more than 64 KB to standard error would deadlock forever,
+which is a bug we had already fixed once in the sibling code path and left
+here.
+
+## Background energy
+
+The swarm re-encoded an identical ledger digest every 20 seconds, 4,320 times a
+day, producing bytes byte-for-byte the same as the previous round. The encoding
+is now reused when nothing has been written. The digest still goes out every
+round, because skipping the send would change how machines converge.
+
+Appending to the swarm message log went from 0.506 ms to 0.00053 ms once it
+stopped rebuilding a 45,000-element set on every append.
+
+## Video generation
+
+`asset.video.generate` is new, and runs against MiniMax's cloud API. It covers
+text to video, image to video with a first frame, and subject reference, across
+the Hailuo and T2V/I2V model families. Set an API key in the keychain or the
+environment and poll `asset.status` the same way as the other asset tools.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.26.0)
+
 ## 2.25.0 - 2026-08-05
 
 ## Peel stops holding gigabytes it does not need
