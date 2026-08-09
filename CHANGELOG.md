@@ -17,6 +17,30 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.26.1 - 2026-08-09
+
+## Peer recovery stays bounded
+
+Repeated disconnects and reconnects can no longer multiply peer lifecycle work
+without limit. Peel coalesces duplicate recovery events, caps its network queues,
+and retires superseded connection attempts promptly.
+
+## Iroh path retries cannot run away
+
+Peel now ships a bounded Iroh recovery path for the QUIC failure that caused a
+peer under heavy network churn to consume tens of gigabytes. Duplicate path
+retries are suppressed, overload is contained, and persistent failures back off
+instead of creating exponential work.
+
+## Better live network diagnostics
+
+`net.trace` now reports endpoint connection counts, queue pressure, and Iroh
+path-retry activity. Stream failures and duplicate connections carry clearer
+reasons, making it easier to distinguish normal reconnect churn from an
+unhealthy peer before responsiveness is affected.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.26.1)
+
 ## 2.26.0 - 2026-08-07
 
 Three audit passes over the last week went looking for memory that never comes
