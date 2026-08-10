@@ -17,6 +17,38 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.27.0 - 2026-08-10
+
+## Scorecard cells are measurements, not coin flips
+
+A model scorecard cell used to come from a single ask per fixture. For a model
+that emits malformed output intermittently, that single draw was a coin flip
+between 0 and 100 that moved on every pass with nothing to explain it.
+
+Each fixture is now asked several times (three by default, configurable from 1
+to 10), and the cell reports what stands behind it: how many asks were taken,
+the run-to-run spread within a fixture, and the fraction of samples whose
+output could not be consumed at all. A pass that runs out of budget reports the
+smaller honest sample count rather than claiming the full one. Rows measured
+before this change still decode cleanly and read as measured once.
+
+## Format failure and capability failure are no longer the same score
+
+An unparseable answer scores 0 — 40 points below a well-formed wrong one. That
+is the right floor, but on its own it cannot distinguish "cannot do the task"
+from "will not emit the envelope", and those call for opposite responses: drop
+the model, or adapt the prompt.
+
+A sample that fails the output contract now gets exactly one restatement,
+identical for every model. The repaired score is reported beside the original,
+never folded into it — published numbers keep their meaning, because the first
+answer is what callers actually get. The delta between the two is a
+counterfactual worth acting on: adding one repair turn to the pipeline would
+move this cell by that much. A merely wrong answer is never retried, since
+re-asking until a model agrees measures persistence, not task success.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.27.0)
+
 ## 2.26.1 - 2026-08-09
 
 ## Peer recovery stays bounded
