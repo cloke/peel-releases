@@ -17,6 +17,33 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.28.0 - 2026-08-11
+
+## Model scorecard: security review measurement
+
+The model scorecard gains a **Security Review** task type — the first find-the-set grader. It measures the judgement step of the security patrol (code span in, findings out) with recall and precision kept apart: missing a planted defect and inventing one are different failures, and the score (F1) can't be gamed from either side. Fixtures come in pairs — planted defects and clean controls — because false positives are what make a patrol get ignored.
+
+The leaderboard is regenerated against the new fixture set for four local models, with per-sample stability and structural-failure rates recorded.
+
+## GPU mesh: delegation fixes
+
+Three fixes for machines whose local Ollama is running but doesn't hold the requested chat model:
+
+- Model enumeration now merges locally installed and peer-advertised models (embedding-only peer models are excluded when capabilities are known).
+- Routing now delegates to a capable peer instead of attempting a guaranteed-to-fail local load when the model isn't installed locally.
+- The recorded inference plan names the peer routing will actually pick, not an arbitrary one.
+
+## Security hardening
+
+- Remote repo scoping is now fail-closed: searches that implicitly address all repositories are denied under a configured repo scope, plural repo-identifier arguments are scope-checked, and nested gateway calls can't launder an out-of-scope repo.
+- Release tooling resolves its helpers from the validated main checkout rather than the invoking directory.
+
+## Performance
+
+- Settings no longer performs a launchd round-trip on every render: the login-item status is cached and refreshed only when it can change. This removes a main-thread stall that made dashboard animations drop frames once Settings had been opened.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.28.0)
+
 ## 2.27.0 - 2026-08-10
 
 ## Scorecard cells are measurements, not coin flips
