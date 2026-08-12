@@ -17,6 +17,33 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.29.0 - 2026-08-12
+
+## Patrols become programmable graphs
+
+Patrols are no longer compiled step lists — they're editable JSON documents describing a dataflow: deterministic scan gates, model judgement nodes, multi-model fan-out panels spread across your machines, mechanical vote/merge aggregation, and reports. The Security Patrol ships as the first seeded graph: a deterministic scan feeding a three-model panel whose seats are chosen by measured scorecard columns, merged by quorum, reported honestly — including per-node degradation when a machine or model is unavailable. Delete the document to restore the shipped default; edit it to reshape the patrol without rebuilding anything.
+
+New tools: `patrol.graph.validate`, `patrol.graph.mermaid` (accurate diagrams for free), and `patrol.graph.run`.
+
+## The scorecard measures topologies, not just models
+
+`models.scorecard` gains a `topology` argument: run the fixture set through a panel-plus-merge subgraph as a unit and get a row beside the individual models — "what the panel bought" becomes a subtraction anyone can read. Per-seat debug dumps (`topologyDebug`) make surprising rows readable instead of deducible.
+
+## Fleet model management
+
+`models.pull` installs a registry model on whichever of your machines runs it, and `ollama.upgrade` performs the full brew upgrade + service restart + version verification in one step. Both are owner-commanded across the fleet via `swarm.remote-tool-call`, and both respect a per-machine consent gate (default off) plus a free-disk floor — refusals say exactly why.
+
+## Model routing honesty
+
+Tier-bound steps (`.bestStandard` and friends) were silently wedged on Claude Sonnet 4.6 when the catalog recommended the Claude 5 family: the recommendation was discarded without a log because the model enum couldn't spell it. The enum now knows Fable 5, Opus 5, and Sonnet 5; standard-tier work resolves to Sonnet 5; and any future un-spellable recommendation logs loudly instead of silently downgrading. The planner's model-selection guidance moves to the 5 family as well.
+
+## Also
+
+- Findings-style measurement payloads align with their serialized field names.
+- Panel seat resolution never seats the same model twice, and quorum counts machines, not repetitions.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.29.0)
+
 ## 2.28.0 - 2026-08-11
 
 ## Model scorecard: security review measurement
