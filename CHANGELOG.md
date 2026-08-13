@@ -17,6 +17,33 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.30.0 - 2026-08-13
+
+## What's new in 2.30.0
+
+### Inline chains can now run local Ollama models (#2192)
+
+A `chains.run` chainSpec step can name a local model directly, either bare
+(`nemotron-3.5-lightning:30b`) or in catalog form (`ollama:qwen3-coder:latest`),
+and the chain runs exactly that model on the worker or on a peer that serves it.
+Previously any local model id collapsed into a generic "Invalid chainSpec" parse
+error, which blocked dynamic model bake-offs dispatched over the swarm.
+
+- chainSpec validation errors are now targeted: each one names the step, the
+  field, and the offending value.
+- A local model that is not installed on the worker and not advertised by any
+  reachable peer is rejected before a worktree is created, with `models.pull`
+  named as the remedy.
+- Chain step results now record the backend that served each step alongside the
+  exact model, so model comparisons are auditable after the fact.
+
+### Benchmarks
+
+- Small-model band scorecard rows added; VibeThinker-3B clears the security
+  floor (#2187).
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.30.0)
+
 ## 2.29.0 - 2026-08-12
 
 ## Patrols become programmable graphs
