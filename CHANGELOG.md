@@ -17,6 +17,39 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.30.1 - 2026-08-13
+
+## What's new in 2.30.1
+
+### Fixes broken swarm sign-in in 2.30.0
+
+2.30.0 was built without the real Firebase configuration, so Settings showed
+"Firebase not configured", presence and worker records stopped updating, and
+cross-network coordination silently degraded. Local mesh and LAN behavior were
+unaffected. 2.30.1 is the same code with the credential restored. If you
+installed 2.30.0, update as soon as convenient.
+
+### Inline chains can now run local Ollama models (#2192, from 2.30.0)
+
+A `chains.run` chainSpec step can name a local model directly, either bare
+(`nemotron-3.5-lightning:30b`) or in catalog form (`ollama:qwen3-coder:latest`),
+and the chain runs exactly that model on the worker or on a peer that serves it.
+
+- chainSpec validation errors are targeted: each names the step, the field, and
+  the offending value.
+- A local model that is not installed on the worker and not advertised by any
+  reachable peer is rejected before a worktree is created, with `models.pull`
+  named as the remedy.
+- Chain step results record the backend that served each step alongside the
+  exact model, so model comparisons are auditable after the fact.
+
+### Benchmarks (from 2.30.0)
+
+- Small-model band scorecard rows added; VibeThinker-3B clears the security
+  floor (#2187).
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.30.1)
+
 ## 2.30.0 - 2026-08-13
 
 ## What's new in 2.30.0
