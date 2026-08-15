@@ -17,6 +17,43 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.31.0 - 2026-08-15
+
+## Security & policy
+
+- Iroh swarm boundaries hardened: gossip payloads are encrypted, knowledge-projection tools are reachable only under fleet trust, and two dispatch gateways now refuse non-local HTTP callers.
+- The last ungated review path runs behind the grounding net.
+- New Firestore collections (`workerSummaries`, `securityEpochs`) back worker discovery; the matching rules are already deployed.
+
+## Honest failures
+
+- Peer-call errors now report what the local machine actually observed instead of asserting the peer is down, and `swarm.reconnect` gives a channel-failure diagnosis a recovery step.
+- Release builds refuse placeholder Firebase credentials outright — the v2.30.x "Firebase not configured" fleet freeze cannot ship again.
+- `chains.run` rejects unresolvable repo identifiers loudly, and `dryRun` now reports the plan without starting the chain — no queue slot, no patrol claim, no worktree.
+
+## Boards
+
+- Closed cards actually get archived: after a verified board load, cards whose issue/PR has been closed past a 14-day grace period are archived automatically, at most once per project per day. `boards.archive.closed` remains for manual sweeps.
+
+## Performance
+
+- AuditTrail no longer loads 192 MB at launch.
+- Home resolves open PRs once per body pass instead of seven times; run-snapshot detail decodes once per render instead of ~21 times.
+- Convergence stops broadcasting to peers that are not answering.
+- Chain concurrency is sized to the machine instead of hard-coded to 1.
+
+## Correctness
+
+- The build cache fingerprints untracked file contents, so uncompiled edits can no longer cache-hit.
+- Scheduler phase primitive staggers same-cadence patrols after a restart.
+- Inbox status vocabulary and the RAG corpus contract now report what a machine actually achieved.
+
+## Mixed-fleet note
+
+Gossip payload encryption means machines still on 2.30.x lose gossip visibility of updated machines until they update. Update owned machines promptly; other-owner beta machines will lag by however long their owners take.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.31.0)
+
 ## 2.30.2 - 2026-08-13
 
 ## What's new in 2.30.2
