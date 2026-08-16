@@ -17,6 +17,32 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.32.0 - 2026-08-16
+
+## Iroh at scale
+
+- **Storm-proof accept path**: a peer that dials over and over without speaking the protocol — an old build, or a wedged Peel — is now closed at the door by a per-peer accept budget instead of parking a handler per attempt. Connections that never open a stream, and streams that never identify their channel, are closed on deadline; closing is also what unsticks the reader waiting on them, so a wedged-but-alive peer can no longer lock a handler forever.
+- **Dial damping**: a failing peer gets one redial per cooldown instead of one per queued send — the dial-per-send storm that burned CPU for hours is structurally gone. Recovery is never delayed: cached and re-established connections bypass the cooldown.
+- **Storms are visible**: transport counters now carry per-minute rates, and pipe health gains a `churnStorm` verdict that names the dominant peer. The storm that once read "healthy" for nine hours now reads as what it is, in `net.trace` and the dashboard.
+
+## RAG security boundary (RAGCore 2.20.0)
+
+- **Credential files are never read**: keys and signing material, `.env` variants, service-account and OAuth JSON, platform credential bundles, and secret stores are refused before ingestion touches a byte — independent of `.ragignore`, symlink-aware, with root `.gitignore` patterns honored as excludes. Refused paths are reported per index run (names only, never contents).
+- **Existing corpora can converge**: new audit and purge operations remove already-indexed credential rows, including AI-analysis rows that previous cleanup paths left behind.
+- **Analyzer reliability**: cold model loads no longer poison analysis runs — a 10-minute deadline, per-request keep-alive, and attributable timeout errors replace the old 60-second guaranteed failure. Namespaced Qwen3 models (hf.co/…) now get the thinking-suppression fast path.
+
+## Also
+
+- rag.analyze/rag.enrich return operation handles, and convergence stops being capped mid-run.
+- Settings no longer rebuilds its tab view on a timer (AppStorage churn fix).
+- The GPU mesh stays visible: publishes to the deadline and reports stale peers as stale.
+
+## Fleet note
+
+Machines still on v2.30.x lose gossip visibility of updated machines until they update, and pre-v2.31 callers get command-channel timeouts against updated peers (a loud-rejection fix is tracked). Update owned machines promptly.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.32.0)
+
 ## 2.31.0 - 2026-08-15
 
 ## Security & policy
