@@ -17,6 +17,61 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.34.0 - 2026-08-17
+
+## Local model reasoning effort, and a context window that matches the model
+
+### Reasoning effort is now a real setting
+
+Local reasoning used to be all-or-nothing: let a model think, or suppress it
+entirely. That is a poor fit for modern reasoning models, which default to
+maximum effort and can spend tens of thousands of reasoning tokens on a trivial
+prompt — while turning reasoning fully off degrades multi-step tool work.
+
+Settings → Agent → Reasoning now offers explicit effort levels alongside the
+existing two:
+
+- **Low** — short thinking trace, for mechanical work like code fixes and
+  commit messages
+- **Medium** — balanced, the general-purpose setting for review and analysis
+- **High** — extended, for genuinely hard multi-step analysis
+- **Maximum** — the longest trace; choose it deliberately
+
+**Allow reasoning** and **Suppress reasoning** behave exactly as before, so
+nothing changes unless you pick one of the new levels.
+
+Effort is sent only to models that advertise a thinking mode. Models without
+one are unaffected, and a server that rejects the setting is detected and
+retried without it rather than failing your request.
+
+### Larger context windows on capable machines
+
+Peel previously asked every local model for at most a 32K context window, a
+limit sized years ago for a much smaller model. Many current models advertise
+262144 — including the ones in everyday use here — so long prompts were being
+trimmed to fit a ceiling the model never actually had. PR review felt this most,
+since reviewer prompts accumulate a diff plus file context plus prior reviews.
+
+The window is now the smaller of what the model advertises and what your
+machine's memory can hold:
+
+| Machine memory | Maximum context |
+|---|---|
+| Under 32GB | 32768 (unchanged) |
+| Under 96GB | 65536 |
+| 96GB and above | 131072 |
+
+Smaller Macs are deliberately untouched. Peel still requests the smallest window
+that fits the prompt, so short requests do not pay for a large allocation.
+
+### Fixed
+
+- Errors from the streaming local-chat path now carry the server's message
+  instead of a bare status code, so recoverable failures are recognized and
+  retried rather than surfacing as an opaque error.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.34.0)
+
 ## 2.33.0 - 2026-08-17
 
 ## The fleet stops lying to itself
