@@ -17,6 +17,36 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.33.0 - 2026-08-17
+
+## The fleet stops lying to itself
+
+- **Update success now means the swap happened.** `app.update` restarts onto the new binary by default, exit 0 without a process swap reports the new `built_not_restarted` outcome (visible in `app.update.status` and Settings), and the restart helper verifies the running process is on the built commit. The `--restart` path had been a silent no-op for months — its product path predated the derived-data move and a missing bundle exited 0.
+- **Clone rebuilds can't ship the template Firebase plist.** Self-update sources the real credential from the running app (or the local MCP, or the canonical checkout) before building, and refuses to deploy a placeholder build with the fix named. When a build IS credential-dead, pipe health says `firebaseCredentialsUnusable` instead of the misleading `firestoreOffline`.
+- **models.pull verifies the model actually landed** (terminal success line + `/api/tags` presence) before reporting completed — a 17 GB pull that Ollama never finalized used to read as success.
+- **The scorecard stops scoring calls that never reached a model**: sub-25 ms router failures classify as unmeasured with honest counts, so one real sample plus N transport failures can no longer publish a blended row.
+
+## Mixed-fleet honesty
+
+- A peer on a pre-hardening build now gets an immediate, decodable "update required" error (with the fix named) instead of silent timeouts that read as a wedged listener — and both timeout messages name the incompatible-build possibility. The admission gate itself is now a pure, fully-tested reducer.
+
+## Iroh at scale, continued
+
+- **Held-open remote calls survive connection churn.** Transport blips no longer kill pending calls (results arrive over redialed sends); goodbye, revocation, stale silence, and peer restart still fail them fast and say which. Long remote operations are no longer capped by session stability.
+- **Every lane now evicts on send timeout** — a convergence send parked against a live-but-not-reading peer used to strand a task per anti-entropy cycle, forever.
+- **The heartbeat breaker can't be pinned open by a one-way peer**: inbound traffic half-opens it (memory kept, backoff escalates) instead of erasing the failure history.
+- **Churn storms get one bounded response**: when the windowed watch attributes a sustained storm to one peer, that session is evicted (per-peer cooldown) instead of only being reported. Departed peers also stop re-firing the stale sweep sixteen times each.
+
+## Faster, quieter launch
+
+- The synchronous Ollama probe, the session-event-log SQLite open, and the checkpoint scan are off the main thread at startup; embedding-model resolution defers to first use. MainActor guardrails are now CI-gated with a ratcheting baseline.
+
+## Fleet note
+
+This release's `app.update` restarts by default (pass `restart:false` to opt out). Machines updating FROM v2.32.0 report honestly through the new outcome; the first update onto a credential-less clone (e.g. a /tmp self-update clone without the gitignored plist) will refuse with exit 5 and name the file to provide — that refusal is the fix working.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.33.0)
+
 ## 2.32.0 - 2026-08-16
 
 ## Iroh at scale
