@@ -17,6 +17,67 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.35.0 - 2026-08-18
+
+## PR patrol: reviews that no longer argue with themselves
+
+Measured across 161 posted patrol reviews: 13 of the 85 since Aug 1 said
+**APPROVE** at the top, `VERDICT: REQUEST_CHANGES` at the bottom, and carried a
+`peel:approved` label. One PR got that treatment three rounds running.
+
+Twelve of the thirteen came from a single line. `extractActionableIssueLines`
+treated any fully-bold line as a section heading — which is also the shape of
+every finding — so it stopped at the first one, reported an empty Issues list,
+and the `actionable-issues-required` gate concluded the reviewer had nothing to
+say and rewrote the verdict.
+
+**The suppressed findings turned out to be false positives**, which changes what
+the fix has to be. The broken gate was accidentally acting as a crude precision
+filter, so repairing the parser without a precision control would have converted
+suppressed noise into posted `peel:changes-requested` labels. Both ship together.
+
+### Integrity
+
+- A bold line closes the Issues section only when it names a known section
+- A review whose body contradicts its own label is **not posted**
+- A gate that changes a verdict rewrites the body's verdict line and names itself
+- Two reviewers that emitted nothing are "no verdict from either", not
+  `agreement: Yes (UNKNOWN)` — 31 of 161 reviews published that
+- The reviewer is told the CI state the patrol already verified; 137 of 161
+  used to say "not visible to local reviewer" about a hard entry gate
+
+### Precision
+
+- A missing-import claim whose symbol is a template built-in is struck
+- The shipped claim patterns had never fired once, because none could parse
+  Peel's own mandated `file:L1-L27 — claim` citation format
+
+### Measurement
+
+`Tools/check-review-integrity.py` reads posted reviews back off GitHub and gates
+on what is decidable — verdict integrity, label integrity, panel honesty —
+reporting the judgement-shaped rest. Baseline at the time of the fix: **42.2%**.
+Finding precision is reported only over the slice it can adjudicate, with the
+denominator named, because a precision figure over an unstated denominator is
+worse than none.
+
+### Security lane
+
+A deterministic scan locates candidate spans — sinks, *removed* authorization
+lines, decisions inside access-control files — and a security-bound model judges
+only those, skipped entirely when the scan finds nothing. It may not cite a
+location the scan did not supply, which is what makes a model with high security
+recall and weak grounding safe to ask. On nine real pull requests: 12 and 8 spans
+on the two identity-token guard PRs, exactly the one removed line on a
+deleted-policy-grant PR, and zero on four feature PRs.
+
+## Also in this build
+
+- Patrol graph seeded for pr-review with quorum confirmation (#2267)
+- A peer's first direct-command timeout is forgiven rather than blacking it out (#2265)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.35.0)
+
 ## 2.34.0 - 2026-08-17
 
 ## Local model reasoning effort, and a context window that matches the model
