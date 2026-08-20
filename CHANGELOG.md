@@ -17,6 +17,26 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.36.0 - 2026-08-20
+
+Swarm inference routing, model capability, and ledger write amplification.
+
+**A late gossip heartbeat no longer makes a machine look empty.** Model inventory was published over both transports and read only from the volatile Iroh blackboard, so a peer whose GPU state aged past the 60s freshness window was indistinguishable from a machine with no models installed. A 256 GB Mac Studio holding 22 models, answering round-trips in 119ms and actively serving a chain, was reported as having none — and scorecard regeneration declared 18 of 19 models unavailable for hours. Routing now resolves against the durable worker registry, with liveness only ordering the candidates (#2281, #2277).
+
+**Reasoning models return their answers again.** Peel sets Ollama's `think` field on every chat request, which splits the reply into a reasoning channel and a content channel, and then read only the content. A model that spent its budget reasoning produced a well-formed stream that Peel turned into an empty success. Nemotron, Qwen and Gemma all answer semantic prompts through Peel chat again (#2283).
+
+**A tool loop that produces nothing is now a failed step.** A model that stopped calling tools early was never asked to synthesise, and an empty result was reported as `completed / failed: 0` — only the output body distinguished a correct analysis from silence (#2071).
+
+**You can tell which model ran.** Dispatch results carry execution provenance, so `swarm.tasks` and `dispatch-status` report the model that served each step (#2071).
+
+**The ledger stopped rewriting 2.2 MB every 30 seconds.** `knowledge` and `knowledgeVerdicts` are 2.07 MB of effectively static content that were rewritten in full on every flush, putting Peel at three times the macOS per-process disk-write budget from a single file. Sections now persist independently: 77.8 KB/s to 5.5 KB/s (#2114).
+
+**Two machines running the same daemon no longer erase each other.** `agentActivity` was keyed by bare daemon id, so two peers running "cfo" wrote the same CRDT key and last-writer-wins discarded one of them (#2021).
+
+Also: one capability vocabulary replacing four (#1750), one Firestore-freshness rule replacing two kept in sync by a comment (#1554), `taskType` narrowing a scorecard pass rather than only its report (#2277), Firestore removed as a task dispatch backend, and `ROADMAP.md` reconciled against live issue state.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.36.0)
+
 ## 2.35.0 - 2026-08-18
 
 ## PR patrol: reviews that no longer argue with themselves
