@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.1 - 2026-08-22
+
+This patch release makes fleet RAG failures immediate and actionable.
+
+- A peer that cannot load its swarm encryption epoch now tells the requesting Mac at once instead of leaving the transfer queued until a reachability timeout.
+- The error identifies the supported owner or admin repair for legacy swarms that have no active security epoch.
+- Same-owner Macs can run default-safe fleet diagnostics again while explicit repository and workspace limits remain enforced.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.1)
+
 ## 2.37.0 - 2026-08-22
 
 This release focuses on dependable long-running work across your Macs.
