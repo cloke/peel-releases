@@ -17,6 +17,14 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.2 - 2026-08-22
+
+- RAG search now accepts a real checkout path and finds the matching clean `origin/main` corpus, even when that checkout was not registered with Peel.
+- Analysis and enrichment started through MCP now publish progress to the same RAG view you use for work started in the app.
+- A swarm with missing encryption setup now refuses RAG transfer immediately and reports one clear repair action. Repairing the security epoch does not rebuild or delete the corpus.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.2)
+
 ## 2.37.1 - 2026-08-22
 
 This patch release makes fleet RAG failures immediate and actionable.
