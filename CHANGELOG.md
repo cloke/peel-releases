@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.3 - 2026-08-22
+
+- RAG artifacts discovered through the shared catalog are now republished after hydration, so eligible peers can find the newly available corpus without waiting for another indexing cycle.
+- A missing swarm security epoch now stops transfer candidates before history or retry work is created. Automatic retries stay quiet until the epoch becomes available, while an operator-requested attempt still records a clear failure.
+- Peel now removes credential-policy exclusions left in older RAG corpora at launch. The cleanup uses RAGCore's canonical store operation, does not load a model or rebuild an index, and never changes source files.
+- Development launches no longer hang after stopping Peel when the macOS preferences service is unresponsive. Preference setup is now bounded, the replacement still launches, and failed-launch recovery retains the full previous app path.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.3)
+
 ## 2.37.2 - 2026-08-22
 
 - RAG search now accepts a real checkout path and finds the matching clean `origin/main` corpus, even when that checkout was not registered with Peel.
