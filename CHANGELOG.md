@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.5 - 2026-08-22
+
+## Reliable MCP startup
+
+- Keeps Peel's local loopback MCP server available when macOS preferences are temporarily unavailable or `cfprefsd` is unresponsive.
+- Preserves an explicit operator choice to disable MCP and leaves LAN/TLS exposure disabled by default.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.5)
+
 ## 2.37.4 - 2026-08-22
 
 ## Safe analyzer corpus rebuilds
