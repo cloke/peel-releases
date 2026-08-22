@@ -17,6 +17,17 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.4 - 2026-08-22
+
+## Safe analyzer corpus rebuilds
+
+- Analyzer convergence now builds a complete replacement generation while search and swarm overlays keep serving the current corpus.
+- Summaries and enriched vectors switch together in one atomic promotion. A failed or cancelled rebuild leaves active search unchanged and can resume later.
+- The RAG view shows replacement-generation progress and makes it clear that active search remains available.
+- Agents can inspect, commit, or abort staged generations through one explicit fleet-authorized control.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.4)
+
 ## 2.37.3 - 2026-08-22
 
 - RAG artifacts discovered through the shared catalog are now republished after hydration, so eligible peers can find the newly available corpus without waiting for another indexing cycle.
