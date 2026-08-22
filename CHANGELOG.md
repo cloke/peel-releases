@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.0 - 2026-08-22
+
+This release focuses on dependable long-running work across your Macs.
+
+- Fleet RAG maintenance can now inspect, repair, analyze, and synchronize a corpus across your own machines with clear progress and cancellation controls.
+- RAG transfers verify the producer's live corpus before export, preserve the achieved compatibility contract, and refuse unsafe bundles before spending time on transfer.
+- Analysis patrols use a clean `origin/main` mirror without changing your working branch. Pull request reviews still use the exact pull request head.
+- Agent runs preserve active and dirty worktrees across rebuilds, relaunches, cancellation, and cleanup so recoverable work is not deleted mid-run.
+- Build coordination reuses content-addressed Iroh artifacts and prevents redundant cross-worktree builds from racing each other.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.0)
+
 ## 2.36.0 - 2026-08-20
 
 Swarm inference routing, model capability, and ledger write amplification.
