@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.6 - 2026-08-23
+
+## More reliable Bender-powered search
+
+- Vector searches now use a live Bender connection immediately after Peel launches, wakes, or reconnects.
+- A recent Iroh connection flap no longer forces a healthy remote embedding query into text-only fallback.
+- Search still falls back quickly when Bender is genuinely offline, without waiting on a long transport timeout.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.6)
+
 ## 2.37.5 - 2026-08-22
 
 ## Reliable MCP startup
