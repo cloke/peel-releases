@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.8 - 2026-08-23
+
+## What’s new
+
+- Remote semantic search now runs reliably on an authorized indexer peer such as Bender instead of stopping at a local-model consent prompt.
+- Direct local semantic search still requires explicit model-load approval. Remote execution uses the target machine’s authenticated fleet authorization.
+- Peer execution context is now server-owned and cannot be forged by a normal MCP caller.
+
+No reindex or manual migration is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.8)
+
 ## 2.37.7 - 2026-08-23
 
 ## RAG privacy and learning
