@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.37.7 - 2026-08-23
+
+## RAG privacy and learning
+
+- Peel now reports when reranking used a remote service and requires a separate explicit opt-in before sending search results for remote reranking.
+- Retrieval feedback stays local, redacts sensitive query content, and uses bounded retention. It is never shared with the fleet.
+- Stable result identifiers let Peel measure which search results actually help later reads and edits. This lays the groundwork for improving retrieval quality from real usage.
+
+No reindex or manual action is required for this update.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.37.7)
+
 ## 2.37.6 - 2026-08-23
 
 ## More reliable Bender-powered search
