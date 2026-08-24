@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.39.0 - 2026-08-24
+
+## What’s new
+
+**Patrols now tell you whether they did anything.** A scheduled patrol that ran and correctly found nothing to do was counted as a success, identical to one that actually reviewed a pull request or filed a finding. Across this fleet that produced patrols reporting success rates in the nineties over roughly 1,700 runs, with no way to ask which of those runs produced anything. A run now settles as one of three things — it did work, it ran and found nothing, or it failed — and "found nothing" moves no success counter, breaks no streak, and raises no alert. Schedule lists report the share of runs that did work, so a patrol that no longer earns its cadence is visible instead of flattering.
+
+**A patrol that cannot run somewhere now says so instead of looking quiet.** The chain runner used to guess at what a stopped patrol meant by reading its output for words like "skip", and a patrol blocked from running on a given Mac printed exactly that word. Nine consecutive pull-request review runs recorded success while reviewing nothing, and every review requested from Slack was silently discarded before it started. Patrol steps now declare whether they stopped because there was no work or because they could not run, the runner obeys the declaration rather than inferring one, and anything that stops without declaring is treated as a failure — including a virtual machine or container that never launched the step at all. The reason reaches you verbatim, with the machine to fix.
+
+**The morning digest can finally report shipped work.** It was told to fetch pull requests through a tool that has never existed, so its "Shipped" section could not be filled in by any model, and its quiet-day rule read that permanent blindness as a quiet night. Digest data now comes from a real fetch, a failed source can no longer be reported as a quiet day, and the digest stops before paying for a summary that has nowhere to be delivered.
+
+**Worktrees that agents create are actually cleaned up.** The auto-cleanup setting removed database rows while leaving the directories on disk, because the hourly pass looked each path up in a list nothing could populate. Cleanup is now driven by what is on disk, removes worktrees through git rather than deleting directories outright, keeps any worktree with uncommitted changes, and honours both the retention window and the disk cap. A worktree survives when git cannot confirm it is safe to remove.
+
+**Patrol history reads at a glance.** Last-run outcomes distinguish four states rather than two: did work, ran and found nothing, never started, and failed. A patrol that keeps coming back all-clear now looks healthy rather than broken, and the number an operator should react to — consecutive failures — has its own row.
+
+No reindex or manual migration is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.39.0)
+
 ## 2.38.0 - 2026-08-24
 
 ## What’s new
