@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.38.0 - 2026-08-24
+
+## What’s new
+
+**Local reviews that returned nothing now return reviews.** A reasoning model emits its entire thinking trace before its first answer token, and Peel capped local model output at 4096 tokens — smaller than the thinking phase alone on a real pull request. The model would think for 15,000 characters, hit the cap, and return an empty answer; because Peel strips reasoning before display, the reviewer appeared to say nothing at all. Reasoning models now run without an output cap, bounded by the existing request timeout instead. Measured on a 27B local model reviewing an 11K-token diff: 6,757 tokens of thinking before the first answer token, and a complete review where there had been silence.
+
+**Reasoning effort now follows the job.** Local models used to run every task at whichever single effort level the machine was set to — maximum reasoning on a commit message, or minimal on a security review. Peel now picks per task: low for commit messages, triage, summaries and pull-request authoring; medium for review; high for code edits, plans, architecture and decision gates. When work is delegated to another machine in your swarm, that machine chooses the effort using its own settings and its own knowledge of what its models support, and reports back which effort it used.
+
+**Goal runs can be capped in dollars.** A goal run accepts a spend ceiling based on cost actually reported by the model provider, rather than an estimate. Because only some providers report cost, every run also reports how many of its steps could not be priced, so a total is never mistaken for the whole story.
+
+**Runaway chains are actually bounded now.** A depth limit on agent-spawned chains had been in place since March but nothing ever supplied the depth, so the limit could never trigger and a chain could spawn chains without bound. Depth is now stamped by the server rather than reported by the agent, and it covers chains started directly as well as spawned subtasks.
+
+**Smaller, faster app.** Roughly 2,900 lines of dead code removed across 112 files, and a new project check keeps the largest source files from quietly growing back.
+
+No reindex or manual migration is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.38.0)
+
 ## 2.37.8 - 2026-08-23
 
 ## What’s new
