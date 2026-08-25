@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.0 - 2026-08-25
+
+## What's new
+
+**Remote checkout provisioning is opt-in.** Peel can now dispatch work by a stable repository identity instead of assuming every Mac uses the sender's local path. A RAG index is treated as read context, never as a writable checkout. If a worker is missing the repo, choose a Swarm Clone Root and enable checkout provisioning on that worker. Peel then clones through its registered SSH remote, validates the origin and waits for the checkout to be advertised before dispatch can continue. Canonical RAG mirrors are never used for agent writes.
+
+**Long swarm jobs now have enough time to finish.** The default dispatch window is thirty minutes, with an explicit per-task override. Priorities now match the documented names and invalid values fail clearly. Status responses identify the worker that actually ran the task, so a late remote result is no longer recorded as an immediate local failure. This release was dogfooded with a Bender implementation that ran for more than ten minutes and completed successfully.
+
+**Knowledge recall can use the RAG data that is already there.** Semantic recall now has a measured 1.5-second budget. Its last-resort projected lexical lane gets two seconds instead of giving up after 100 milliseconds. Healthy local indexes should return useful context instead of reporting that retrieval is unavailable, while real timeouts still explain which budget expired and where to inspect projection health.
+
+**Fleet updates now follow each worker's distribution channel.** Source workers rebuild from the selected commit. Direct-release workers update through the same-owner Sparkle path. The tool contract explains both routes and their skip conditions. The release compile gate now covers the App Store target, the Direct target and the iOS companion so shared-code drift is caught before publication.
+
+**Harbor posts are shorter and more trustworthy.** One formatter now removes internal scaffolding and long device identifiers. Repeated alerts stay in their existing thread unless new facts arrive. Channel creation states its visibility and refuses private channels with no members, preventing successful writes that nobody can see.
+
+Peel also reports a missing swarm security-rotation Cloud Function as a deployment problem instead of a generic network error. No RAG reindex or data migration is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.0)
+
 ## 2.40.0 - 2026-08-25
 
 ## What's new
