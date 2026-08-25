@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.1 - 2026-08-25
+
+## What’s new
+
+- RAG transfer history now applies peer, repository, and completion-time filters together, so sparse combined matches are returned accurately.
+- Transfer-history storage now removes records older than 30 days and caps the database at 20,000 rows, including bounded cleanup for existing oversized stores.
+- MCP clients now receive clear returned, matched, and total counts. Invalid completion timestamps return a direct validation error, while the existing `rowCount` field remains compatible.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.1)
+
 ## 2.41.0 - 2026-08-25
 
 ## What's new
