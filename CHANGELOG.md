@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.40.0 - 2026-08-25
+
+## What's new
+
+**Local inference is no longer killed while it is working.** Two hard time limits sat under the generation path, and both counted elapsed time rather than progress. One capped a request's total lifetime at ten minutes, sized in its own comment for a 4,096-token completion — smaller than a reasoning model's thinking phase, so a slower peer would abandon a run that was streaming fine and return nothing at all rather than a partial answer. The other force-released the GPU after four minutes and handed it to a second caller while the first was still generating. Both are now bounded by stall instead: a run is cut off when it stops producing tokens, not when it has been going a long time, so a legitimately long task finishes.
+
+**Agent-facing UI controls no longer confirm work they did not do.** Ten automation controls for selecting workspaces, worktrees, git repositories, branches and commits wrote preference keys that no view reads, while the tool that reports UI state read those same keys back — so an agent that selected something and then verified it received its own write as confirmation. The lists of valid values offered alongside them had no writer at all and were permanently empty, telling an agent that a machine with forty worktrees had none. Those controls are gone, and asking for one now returns a plain refusal instead of a false success.
+
+**A tool built to stop code decay was quietly deleting its own records.** Running the file-size ratchet's baseline update against a single path erased every ceiling outside that path and exited reporting success — twenty-three tracked limits became twenty on a scoped run. A partial scan can no longer overwrite the whole record; it refuses and says why. Two smaller counting errors in the same tool were fixed alongside it.
+
+## Under the hood
+
+Three hundred and fifty-one declarations that nothing referenced were removed, along with the last protocols that existed only to be conformed to once. Every removal was verified individually against the app, its tests, the iOS companion target and each local package's own test suite, and two that turned out to be reachable were caught and restored before shipping. Nothing user-visible changes; the app carries less dead weight.
+
+No reindex or manual migration is required.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.40.0)
+
 ## 2.39.0 - 2026-08-24
 
 ## What’s new
