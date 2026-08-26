@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.5 - 2026-08-26
+
+Peel makes long-running agent work safer and review results easier to act on.
+
+- Active chain worktrees are protected from stale cleanup while background tasks are still using them.
+- Posted PR reviews use one predictable structure, keeping findings and evidence clear while process metadata stays compact.
+- Clean approvals stay brief, reducing noise without removing required attribution.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.5)
+
 ## 2.41.4 - 2026-08-26
 
 Peel now makes agent handoffs reflect the exact code that will merge.
