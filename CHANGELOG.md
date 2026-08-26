@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.4 - 2026-08-26
+
+Peel now makes agent handoffs reflect the exact code that will merge.
+
+- Agent runs wait for background verification to finish and stop leftover verification processes before review begins.
+- Reviewers evaluate the committed branch diff, while run statistics report that same immutable tree.
+- Approval and merge stop with clear guidance when a worktree contains uncommitted implementation changes.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.4)
+
 ## 2.41.3 - 2026-08-26
 
 - Review performance data is now durable across scheduled patrols, daemon runs, manual reviews, and re-reviews. Reports retain the actual model, repository, verdict, and run provenance.
