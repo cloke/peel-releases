@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.2 - 2026-08-26
+
+- Verified machines now send local-model work to the target machine's durable permission policy, so dispatch keeps working across Peel and tool-catalog updates.
+- Remote policy inspection is clearer and safer. Duplicate records repair automatically, repository scopes remain enforced, and credentials cannot be delegated.
+- MCP clients can use this Mac's own `.local` hostname without weakening DNS-rebinding protection.
+- Harbor handles absent public output and duplicate publication more predictably, with clearer role and headline comparisons.
+- Source updates now use a clean Xcode dependency graph, preventing the package-resolution crash found while updating Bender.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.2)
+
 ## 2.41.1 - 2026-08-25
 
 ## What’s new
