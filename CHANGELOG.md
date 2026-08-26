@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.3 - 2026-08-26
+
+- Review performance data is now durable across scheduled patrols, daemon runs, manual reviews, and re-reviews. Reports retain the actual model, repository, verdict, and run provenance.
+- Failed metrics writes queue safely for idempotent recovery without posting a duplicate GitHub review. Recent history is backfilled only when the evidence is unambiguous.
+- Managed agent filesystem searches now have native scope and time limits across shell wrappers, substitutions, globs, and multiple roots.
+- Verified same-owner peers can inspect the fleet RAG catalog while anonymous and default access remain restricted.
+- Release verification now reads signed entitlements from Apple's supported DER format and audits the exact public ZIP users download.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.3)
+
 ## 2.41.2 - 2026-08-26
 
 - Verified machines now send local-model work to the target machine's durable permission policy, so dispatch keeps working across Peel and tool-catalog updates.
