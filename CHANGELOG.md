@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.6 - 2026-08-26
+
+- RAG-assisted Ollama steps now stay on the swarm worker Peel selected, including every follow-up turn in the tool loop.
+- The originating machine keeps control of repository tools and returns only the requested evidence to the inference worker.
+- Run results now identify the machine that actually served each model response.
+- Malformed or unresolved remote tool calls stop with a clear error instead of silently falling back to local inference.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.6)
+
 ## 2.41.5 - 2026-08-26
 
 Peel makes long-running agent work safer and review results easier to act on.
