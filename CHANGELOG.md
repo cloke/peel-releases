@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.7 - 2026-08-27
+
+- Pinned swarm runs now survive slow local-model inference and reuse one authenticated session instead of failing on the first request.
+- RAG-assisted work is tied to the requested repository and exact source commit. Missing or stale index receipts stop the run clearly instead of returning plausible answers from old code.
+- Read-only analysis can run directly on Bender without creating a disposable worktree, while any mutating or unpinned workflow keeps the existing isolation boundary.
+- Completed runs retain durable proof of the machine, worker, transport, and tool rounds that produced the result.
+- Canonical RAG mirrors now refresh by repository identity and record completion only after the exact source revision is verified.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.7)
+
 ## 2.41.6 - 2026-08-26
 
 - RAG-assisted Ollama steps now stay on the swarm worker Peel selected, including every follow-up turn in the tool loop.
