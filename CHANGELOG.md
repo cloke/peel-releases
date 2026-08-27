@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.8 - 2026-08-27
+
+## Reliable exact-revision RAG
+
+- Exact-revision RAG checks now use the same repository identity as the indexed catalog, so canonical sync receipts remain verifiable across the swarm.
+- Dispatch still fails closed when the requested source revision is unavailable. It will not silently answer from stale or mismatched code.
+- New regression coverage protects remote-backed, first-commit, and local-only repository identities.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.8)
+
 ## 2.41.7 - 2026-08-27
 
 - Pinned swarm runs now survive slow local-model inference and reuse one authenticated session instead of failing on the first request.
