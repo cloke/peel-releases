@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.41.9 - 2026-08-27
+
+## Swarm control you can trust
+
+- Trusted peers can now query `peel.version` without an avoidable remote-policy denial, making fleet readiness and post-update verification deterministic.
+- Update receipts distinguish Sparkle and TestFlight history from source-build history, and expose the latest authoritative status for the active channel.
+
+## Truthful RAG execution receipts
+
+- RAG search now reports whether a query embedding actually ran and whether it ran remotely, locally, or not at all.
+- A failed remote embedding delegation is no longer misreported as local-model execution when local loading was not authorized.
+
+These changes make dispatch diagnostics more useful for model routing, token optimization, and proving that Bender—not the coordinating Mac—performed inference work.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.41.9)
+
 ## 2.41.8 - 2026-08-27
 
 ## Reliable exact-revision RAG
