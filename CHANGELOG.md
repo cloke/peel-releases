@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.43.0 - 2026-08-28
+
+This release expands Peel's model and agent choices while making remote work easier to follow.
+
+- Use Codex CLI as an agent backend alongside the existing local CLI providers.
+- Score authenticated Claude CLI models and every exact zero-priced OpenRouter chat model, with provider cost and token attribution preserved.
+- Discover free OpenRouter models from the live upstream catalog without changing your normal model-picker allowlist.
+- See live progress on remote chain run cards instead of waiting on an opaque running state.
+
+OpenRouter routing aliases remain excluded from scorecards because a published score must identify the exact model that answered. Paid and unknown-price OpenRouter models are never included in free-model runs.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.43.0)
+
 ## 2.42.0 - 2026-08-28
 
 ## OpenRouter, as a first-class model provider
