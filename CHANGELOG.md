@@ -17,6 +17,89 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.42.0 - 2026-08-28
+
+## OpenRouter, as a first-class model provider
+
+One API key fronting roughly 400 models from about 40 vendors, including a
+rotating set of zero-cost ones. This is Peel's first remote HTTP chat provider —
+the other cloud models are driven through agent CLIs, and the other HTTP chat
+path (Ollama) is local.
+
+- The key lives in the keychain, with an `OPENROUTER_API_KEY` environment
+  override. Settings reports which source actually won, so an environment
+  variable shadowing the saved key says so instead of displaying a key that is
+  not the one in use.
+- The catalog is fetched live from OpenRouter and cached on disk. A bundled list
+  would be wrong within a week; the cache exists so a cold launch or an offline
+  machine degrades to "last known" rather than to nothing.
+- "Free" is decided by the price being zero on both sides, not by the `:free`
+  suffix on the model id. Those disagree upstream — 21 models are zero-priced
+  while only 18 carry the suffix — and price is what determines whether a
+  request costs money. A price that cannot be parsed is deliberately not
+  treated as free.
+- Model kind comes from the output modality, which keeps the zero-priced music
+  models out of the free-chat list a picker offers.
+- Routing dispatches enabled OpenRouter ids to OpenRouter before any
+  local-versus-peer decision. Without that step an OpenRouter id found no peer
+  that could hold its weights and fell through to local Ollama, failing with
+  "model not found" for a model the picker had just offered.
+- Responses carry real token counts and dollar cost, and provider failures
+  surface their actionable text rather than a bare "Provider returned error".
+
+## Release notes that describe an actual deploy
+
+The release-note path could previously produce a note when nothing had shipped.
+Three separate causes, all of them the same shape — the data was never there:
+
+- The fetch was not a deploy. It listed the last twenty merged PRs with no time
+  window, so every run saw twenty merges whether or not anything shipped. A
+  deploy is the range between two deploy commits, which git can state exactly.
+- `PEEL_TRACKED_REPOS` was empty. It read only the manually tracked list, which
+  has been empty on this fleet throughout, and now falls back to every
+  registered checkout. This also unblocks the morning digest's shipped-work
+  section.
+- The daemon gate keyed on a proxy — "the aggregate output was non-empty" — which
+  is true with zero deploys, because that output also carries event summaries. It
+  now keys on a deploy marker present in every real deploy section and nowhere
+  else.
+
+Peel itself is skipped, correctly: it ships by tag and has no `production`
+branch, so branch-watching can never describe it and must not pretend to.
+
+## Hosted models in the scorecard
+
+The model scorecard measures chat output, so its third tier could not be the
+local in-process embedding fallback — `NLEmbedding` and hash vectors do not
+answer a chat fixture. Tier 3 is now an explicitly enabled hosted chat provider,
+and every row carries where it ran: local Ollama, a delegated swarm peer, or a
+hosted provider named alongside the measurement.
+
+- Hosted rows keep the measuring device, because that Mac ran the fixture and
+  the grader — but device memory and GPU rank never select a hosted headline,
+  since the Mac did not run the model.
+- Provider-reported cost and token counts stay optional. Missing accounting is
+  recorded as unknown rather than rewritten as zero.
+- Routing aliases like `openrouter/free` are refused outright: a bakeoff row has
+  to name the concrete model it measured. An enabled hosted id resolves straight
+  to its provider, so this is a model-scoped lane rather than a silent cloud
+  fallback after a local or peer failure.
+
+The first OpenRouter code-edit bakeoff is recorded in the leaderboard, which now
+carries 224 rows.
+
+## Fleet safety
+
+- Fleet route receipts report what actually happened rather than what was
+  intended, and the worker lifecycle path carries a release-only hard guard.
+
+## Housekeeping
+
+- The OpenRouter settings surface routes its colors through the theme's semantic
+  roles, so a hue means a status rather than a category.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.42.0)
+
 ## 2.41.9 - 2026-08-27
 
 ## Swarm control you can trust
