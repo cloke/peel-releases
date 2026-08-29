@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.44.1 - 2026-08-29
+
+This release closes several reliability gaps found while using Peel to coordinate Peel work across machines.
+
+- Move a managed Mac from Homebrew Ollama to the signed official Ollama app through Peel. The migration drains loaded models, verifies the replacement server, and rolls back on failure. Official-app launches now stay unattended even when installing a global command-line symlink would require administrator approval.
+- Add the provider-neutral JSON-RPC transport core for persistent agent sessions. It preserves follow-ups, steering, typed approvals, user input, cancellation, usage, and replayable provider events. Model Lab persistence and swarm wiring remain follow-up work.
+- Add fenced leader, work-intent, source-lane, question, decision, and approval contracts for coordinated agent work. Build requests from linked Peel checkouts now converge on one durable steward, and launches no longer inherit stale build context.
+- Make model scorecards safer and easier to audit with harness-revisioned results and published OpenRouter evidence. Private fixtures fail closed, and an unreadable local scorecard store can no longer be replaced by an empty merge.
+- Restore RAG text-search recall to the earlier substring baseline while keeping ranked retrieval substantially faster on Peel's measured corpus.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.44.1)
+
 ## 2.44.0 - 2026-08-29
 
 This release gives multi-agent work a durable coordination layer and makes model evaluation easier to trust.
