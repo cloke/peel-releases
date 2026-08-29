@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.44.0 - 2026-08-29
+
+This release gives multi-agent work a durable coordination layer and makes model evaluation easier to trust.
+
+- Queue builds, tests, and releases through one FIFO steward shared by all callers. Every job keeps its exact commit and can be observed or cancelled by durable ID.
+- Require a separate explicit approval after release preflight. A successful build alone cannot start publication.
+- Record the exact OpenRouter model and provider. Scorecards preserve usage and latency, with failures and provenance attached. Free-model execution fails closed unless both prompt and completion prices are explicitly zero.
+- Run review patrols on a 15-minute policy with cheap or local preliminary work and Claude Opus 5 reserved for escalation.
+- Make RAG indexing and search more reliable by preparing every raw chunk-writing connection before use and serving `rag.search` text mode through ranked BM25 while keeping the substring lane explicit.
+
+OpenRouter routing aliases remain excluded from scorecards because a published score must identify the exact model that answered.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.44.0)
+
 ## 2.43.0 - 2026-08-28
 
 This release expands Peel's model and agent choices while making remote work easier to follow.
