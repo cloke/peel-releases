@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.44.2 - 2026-08-30
+
+Peel 2.44.2 makes agent work more durable and provider selection explicit.
+
+- Persistent Codex and Claude sessions now keep transcripts and reconnect through a provider-neutral control plane, so longer work survives normal app and channel interruptions.
+- Agent dispatch now separates authentication from authorization. Claude and Codex can be enabled for frontier work while Copilot stays signed in for diagnostics but cannot receive coding tasks.
+- Chain steps bind models to exact providers and fail closed instead of silently falling back. Dry runs report provider policy failures before catalog errors.
+- Scheduled work no longer overlaps an existing live run, and the build coordinator reports liveness and topology state more accurately.
+- Ollama can switch transactionally between Homebrew and the official signed app, with rollback and bounded redacted activation diagnostics for safer swarm upgrades.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.44.2)
+
 ## 2.44.1 - 2026-08-29
 
 This release closes several reliability gaps found while using Peel to coordinate Peel work across machines.
