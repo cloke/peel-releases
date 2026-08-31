@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.44.3 - 2026-08-31
+
+- Repository-scoped RAG searches now accept stable identifiers such as `github.com/org/repo`. Peel resolves the local index or overlay first, then chooses a live authorized peer when remote retrieval is needed.
+- RAG indexing now rejects embedding model and dimension mismatches before modifying the index, with clearer recovery guidance.
+- Swarm synchronization is more resilient. Idle Iroh gossip subscriptions close deterministically, and ledger payloads are bounded before expensive decoding or merging.
+- GitHub issue lists now handle actions performed by GitHub Apps instead of failing to decode the response.
+- Leased Claude background sessions can now join coordinator-managed shared-main work. Agent coordination also validates submitted result commits and reports expired leadership more precisely.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.44.3)
+
 ## 2.44.2 - 2026-08-30
 
 Peel 2.44.2 makes agent work more durable and provider selection explicit.
