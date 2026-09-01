@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.45.0 - 2026-09-01
+
+### PR reviews fail closed on invalid scope
+
+This release ends the false-approval failure mode measured on 2026-09-01, where every patrol review shipped `APPROVE` + `peel:approved` over an empty or wrong commit range.
+
+- A review verdict can no longer post, label, or feed readiness/auto-merge without run-bound evidence that the PR's own diff was reviewed: the scope gate records the changed-file paths and a digest of the exact diff bytes, and the submission boundary re-verifies them against live PR metadata at publication time. Stale, self-referential, zero-file, or unverifiable scope is a refusal, not a pass.
+- Reviewers now have a legal exit: `NO_CHANGES` and `INVALID_REVIEW_SCOPE` are terminal verdicts — nothing posts, nothing is labeled, and no approval signal is produced. Previously `APPROVE` was the only reachable verdict on an empty range.
+- Findings struck for citing files outside the PR no longer collapse into an APPROVE; a review whose evidence describes a different PR is withheld, even when it never uses `[Comment on …]` markers and even when no diff text is available.
+- Auto-merge gains a hardcoded scope gate: a PR with no verifiable current scope cannot merge.
+- PR-review worktrees now start at `pull/N/head` (the fetch was previously unreachable), and the scope gate materializes the PR head locally so reviewers inspect the PR's actual code.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.45.0)
+
 ## 2.44.3 - 2026-08-31
 
 - Repository-scoped RAG searches now accept stable identifiers such as `github.com/org/repo`. Peel resolves the local index or overlay first, then chooses a live authorized peer when remote retrieval is needed.
