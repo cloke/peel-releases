@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.46.0 - 2026-09-03
+
+The work spine: point Peel at a backlog, or type a sentence, and the swarm carries it from issue to a reviewed pull request.
+
+### New
+- **The Box on Home.** Type a sentence; Peel reads it as a task, a campaign, or a question, shows the preview, and starts the work. Return previews, Shift-Return keeps a newline, and the preview lets you pick the repository. External agents use the same funnel through `work.submit`.
+- **Campaigns.** `campaign.start` mints a repository's open issues as claimable work with complexity tiers and file-scope leases; `campaign.claim` is pull dispatch with a dead-worker sweep, tier routing (local models for mechanical work, frontier CLIs for complex work), attempt budgets, and honest settlement. `campaign.status` and `campaign.list` are the burndown; `work.status` and `work.cancel` speak one vocabulary for runs and campaigns.
+- **Delivery.** A chain run that asks for a pull request ends in one, opened by Peel with a provenance block, and Peel reviews its own pull requests on a different machine before a serial merge queue merges them.
+- **Failure as a state.** Dead-letter reasons, retries that vary (a tier bump, a fix-up, a rebase-first), campaign cost caps, and a wedge detector that knows a heartbeating build step is not a wedged run.
+- **Home is mission control:** the Box, the decisions that need you, campaign burndown cards, and what every machine is doing. Issue write-back tools (`github.issue.comment`, `close`, `label`), `ui.setText` and `ui.key` for visual passes.
+
+### Fixed
+- Worktree finalization no longer refuses a clean run because an ignored `tmp/` exists, and cleanliness checks judge each untracked file on its own.
+- Copilot serves pull-request review only; implementation, patrol, and daemon steps never fall through to it, and a machine whose only cloud CLI is Copilot does not advertise tiers it cannot serve.
+- Inbox rows keep their title whole; observe surfaces use hue for status, never category; twelve tool handlers that never received their delegate now do.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.46.0)
+
 ## 2.45.0 - 2026-09-01
 
 ### PR reviews fail closed on invalid scope
