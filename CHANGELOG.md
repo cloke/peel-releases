@@ -17,6 +17,60 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.47.0 - 2026-09-03
+
+Agents that fail honestly, a lane that says when it is busy, and an Inbox that
+tells you what it wants from you.
+
+**A CLI that exits without a turn is no longer an answer (#2519).** Only the
+Claude lane returned a failed process's stdout as a completed model turn;
+Copilot, Codex and Gemini always refused a non-zero exit. All four now share one
+refusal that names the CLI, the exit code and what the process printed. A new
+`executor_failure` reason retries the same tier and gives back the attempt the
+claim spent, so a quota window or a crashed process can no longer drain a
+backlog item's budget or escalate it as if the model had answered badly.
+
+**A working agent is no longer killed at fifteen minutes (#2523).** Every CLI
+agent session was capped at 900 seconds of wall clock — the same number as the
+idle timeout, so the cap was the only one that ever fired on a healthy,
+streaming agent. Liveness stays with the idle timeout; the backstop is now four
+hours. The same change carries a chain's real failure message to the run, so a
+failed run reports the step that failed instead of "Chain failed — check output
+for gate or step errors".
+
+**A busy inference lane says so (#2532).** Remote callers used to see silence
+and then their own timeout, which is indistinguishable from a dead machine: a
+mechanical sweep on a peer lost every call at 900 seconds while that peer
+answered status probes in 223 milliseconds. `ollama.chat` now replies
+`status: "queued"` with the queue position, the current holder and an estimated
+wait; `gpu.mesh.status` carries the same snapshot so a pipeline can check before
+it dispatches; and a peer that is merely busy is reported as busy rather than as
+a malformed response.
+
+**`preferOpportunityID` reaches the item you meant (#2525).** The preference was
+applied after a twenty-item window sorted oldest-first, so a sentence just typed
+into the Box — the case it exists for — could not be claimed on a busy plane,
+and the answer blamed conditions it had not measured.
+
+**The Inbox groups by what each row asks of you (#2514, #2528).** One row grammar
+for runs and pull requests, then four sections in reader order: Needs you, In
+progress, Waiting on others, History. The Needs You / In Progress / Open triad is
+gone because the sections carry that meaning, filters collapse to one wrapping
+chip row that clears in a click, and finished work reads as History rather than
+as waiting on somebody.
+
+**Path policy reaches every subprocess the app starts (#2534).** The directories
+that raise a macOS permission dialog and hold nothing Peel wants — Music,
+Movies, Pictures, Photos, Documents, Desktop, `/Volumes`, `/Network` — were
+excluded for the CLI and chain runners and nowhere else. The connector runtime
+and VM isolation service spawned their children with the environment inherited
+untouched; they no longer do.
+
+**Release notes are checked against what git says shipped and posted to Slack
+(#2527, #2531).** The Box shows a Shift-Return hint under the field (#2501).
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.47.0)
+
 ## 2.46.0 - 2026-09-03
 
 The work spine: point Peel at a backlog, or type a sentence, and the swarm carries it from issue to a reviewed pull request.
