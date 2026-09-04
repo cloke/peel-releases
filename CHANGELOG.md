@@ -17,6 +17,28 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.48.0 - 2026-09-04
+
+## PR review escalation runs on Sonnet
+
+The PR Review Patrol's "Frontier Reviewer" escalation step was pinned to Claude
+Opus 5, which carries a 3.0x premium multiplier. That step is the only one in
+Peel permitted to spend Copilot premium requests, and it escalates whenever a
+local review comes back ungrounded — a routine outcome, not a rare one. Running
+on four 15-minute patrol schedules, it drew premium requests against the
+maintainer's GitHub account on any patrol machine that did not resolve the
+Claude CLI ahead of Copilot.
+
+The step now runs Claude Sonnet 5 at a 1.0x multiplier. Where the escalation
+still lands on Copilot it costs a third as much, and on a machine whose Claude
+CLI is available and preferred it costs nothing at all, since
+`AgentBackend.decide` tries the Claude CLI before Copilot for Claude-family
+models.
+
+The PR-review templates now contain no premium-tier model at all.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.48.0)
+
 ## 2.47.0 - 2026-09-03
 
 Agents that fail honestly, a lane that says when it is busy, and an Inbox that
