@@ -19,23 +19,57 @@ Each entry links to its full release notes.
 
 ## 2.48.0 - 2026-09-04
 
-## PR review escalation runs on Sonnet
+## PR Review Patrol runs again
 
-The PR Review Patrol's "Frontier Reviewer" escalation step was pinned to Claude
-Opus 5, which carries a 3.0x premium multiplier. That step is the only one in
-Peel permitted to spend Copilot premium requests, and it escalates whenever a
-local review comes back ungrounded — a routine outcome, not a rare one. Running
-on four 15-minute patrol schedules, it drew premium requests against the
-maintainer's GitHub account on any patrol machine that did not resolve the
-Claude CLI ahead of Copilot.
+Two independent defects were combining to kill the patrol on the fleet. Both are
+fixed here.
 
-The step now runs Claude Sonnet 5 at a 1.0x multiplier. Where the escalation
-still lands on Copilot it costs a third as much, and on a machine whose Claude
-CLI is available and preferred it costs nothing at all, since
-`AgentBackend.decide` tries the Claude CLI before Copilot for Claude-family
-models.
+**A local reviewer could loop forever.** #2339 removed `num_predict` for
+reasoning models on the strength of a 600 s wall-clock bound, and #2350 then
+turned every clock into an *idle* timeout that each streamed byte resets. A model
+repeating a paragraph resets them all, so the only remaining bound was the
+context window filling. `DegenerateRepetitionDetector` now watches each stream
+channel and stops a non-converging model, keeping and labelling the partial
+answer rather than discarding it. (#2461)
 
-The PR-review templates now contain no premium-tier model at all.
+**The prompt was too big for the command line.** macOS caps argv + envp for a
+single exec at `ARG_MAX` (1 MiB), and the agent prompt travelled as one argument.
+A large enough prompt therefore failed at `posix_spawn` with `E2BIG` — surfaced
+as "The operation couldn't be completed. Argument list too long" and booked as a
+generic step failure — rather than reaching a model at all. The looping reviewer
+above is what pushed it over the line: 1.47 MB of output became the next step's
+context, and four consecutive patrol runs died at the last step after ~4 hours
+each, none posting a review.
+
+The Claude and Codex lanes now send the prompt on stdin, which has no such
+ceiling. Every lane is preflighted against the real exec budget, so a launch that
+genuinely cannot fit is refused by name — naming the CLI, the size, the limit and
+the largest argument — instead of by POSIX errno. (#2555)
+
+Also in the patrol: the frontier escalation now reviews on Sonnet rather than
+Opus, the PR-review gate's `CI_STATUS` line survives context truncation so a
+reviewer can no longer guess at CI on a PR whose checks were just verified green
+(#2461), and patrols take the GPU first and say so (#2512).
+
+## Inbox
+
+The detail pane leads with the decision, and the list gets readable section
+headings, honest status, and no row buttons (#2494, #2529). The contextual
+sidebar is now a column you can size.
+
+## Everywhere else
+
+- The file-size ratchet reports instead of blocking. It was taking down every
+  open branch for baseline drift that had nothing to do with any of them.
+- `GET /mcp` answers 405 rather than 404, and `/mcp` advertises Streamable HTTP.
+- MCP notifications are acknowledged for the Codex CLI.
+- Unverified Ollama model pulls retry, bounded.
+- A paused campaign has a way back, and it reaches the Box (#2530).
+- A release is checked against its own commit, not a moving tip (#2535).
+- The PII scrub report is written off the main actor.
+- Cloud scorecard passes have a spend ceiling; cloud candidates are admitted only
+  when explicitly named, and what was withheld is reported rather than silently
+  absent (#2182).
 
 [Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.48.0)
 
