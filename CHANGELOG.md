@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.49.0 - 2026-09-05
+
+Upgrade every process sharing an agent-control store together. Older versions cannot replay the new campaign and leadership commands.
+
+Native accessibility inspection now uses Peel Accessibility Client, which needs its own macOS Accessibility permission. Settings > MCP shows its status and provides Request Access. Home and Inbox automation works through registered app controls without this permission. The old `ui.ax.click` `method` parameter has been removed; use AXPress, a named `action`, or a registered `ui.tap` control.
+
+- Home keeps the decision queue to five items and opens campaign decisions directly. Pause new claims, resume a manually paused campaign when its budget permits, or raise a finite premium cap. Each action previews its effect, rechecks the campaign and coordinator, and reports the recorded outcome.
+- Inbox questions and submitted results have durable actions. Answers bind the exact question and approval scope. Review decisions reject stale submissions and show a receipt. Run details put review and recovery above execution history, and submitted work frees its worker slot while awaiting review.
+- Opening a run reveals it through saved filters and delayed inventory. Historical and current runs share search and filters, with one row per run and clear historical state.
+- Agents discover the same Home and Inbox actions people see, with enabled state and target revisions. Reopening a sheet invalidates old action receipts, and text editing follows the same ownership rules. Delivery and the recorded outcome remain separately observable.
+- Peel registers its MCP connection for new Codex sessions and distinguishes sandbox reachability from a stopped server. Native automation checks the exact window and control through a bounded helper. Review prompts identify missing or unavailable CI checks explicitly.
+
+Campaign controls do not resume a paused worker, retry a merge, or reopen failed work; those recovery actions remain open under #2435. Raising a cap preserves a manual pause and running work.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.49.0)
+
 ## 2.48.0 - 2026-09-04
 
 ## PR Review Patrol runs again
