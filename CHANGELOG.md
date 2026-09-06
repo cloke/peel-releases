@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.50.0 - 2026-09-06
+
+PR review never inverts a verdict again. The `actionable-issues-required` gate used to rewrite a REQUEST_CHANGES it could not parse into an APPROVE; measured on tuitionio/tio-api it did that to five reviews in one week, three of them reasoning traces posted as approvals. The parser now reads `## Findings` as well as `## Issues`, skips the formatter's suggestion items, and no gate can lower a verdict: a review with nothing readable, an approval over listed findings, a body with no review structure, or a review whose every finding was struck is withheld and the next patrol pass reviews the head again. A local reviewer that emits no VERDICT line, or a Local Consensus with no CONSENSUS line, escalates to the frontier reviewer instead of reading as agreement.
+
+- A mined PR-review corpus (`Docs/benchmarks/review-corpus.json`, 1403 pairs from answered review comments on tio-api and tio-front-end) scores reviewers on recall and specificity against the whole PR diff the patrol hands them; `Tools/patrol-review-corpus.py` mines, builds, scores and publishes it into the leaderboard appendix. First pass: gemma4:26b and qwen3.6-tools name none of the human-reported defects; Claude Opus 5 names five of thirteen.
+- The run outcome harvest fills `agents.outcomes`: pull requests visited, merged, closed, human corrections that led to a commit, with `revertedWithinDays` deliberately left unwritten until a branch search exists.
+- The free OpenRouter catalog is measured on the public fixture lane; `Tools/model-scorecard-refresh.sh` gains `--models` and `--public-only`. cohere north-mini-code and minimax m3 score 80 to 100 on label triage, plans and summaries.
+- Agent control plane: authority renews atomically after lock admission, an opportunity dead-letter CLI, campaign exception transition times preserved, Inbox unifies campaign decisions, Ollama tool-required steps are refused when no tools are configured, structured Qwen activity reporting in swarm cleanup, and bounded CLI test subprocesses.
+- A VERDICT written behind a heading, list marker or bold label now parses, and a verdict only stated in prose is labeled inferred rather than emitted (#2574).
+- Eighteen built-in chain-template shell commands moved from Swift into fragments.json, and the catalog behavior test is re-pinned (#2575).
+- Sixteen unused declarations removed after a fresh Periphery pass (#2576).
+- The scorecard refresh script can cap hosted spend with --max-cloud-spend-usd (#2573).
+- The FirebaseService task listener and cancel path used by the iOS companion are restored after the sweep removed them (#2577).
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.50.0)
+
 ## 2.49.0 - 2026-09-05
 
 Upgrade every process sharing an agent-control store together. Older versions cannot replay the new campaign and leadership commands.
