@@ -17,6 +17,26 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.51.0 - 2026-09-08
+
+## Fleet upgrade order
+
+Operators using the repository CLI should update both Steward runtimes before launching this app version. Upgrade every participating machine before enabling a shared repository coordinator. Existing work must be drained before moving a repository between coordinators; changing a host name does not transfer its active claims.
+
+## Shared work, one owner
+
+Peel now coordinates repository work through Steward. Reviews, patrols, and dispatched chains claim their work atomically, so two machines cannot both take the same task. A repository can name one coordinating Mac; if that Mac is unavailable, Peel reports the problem instead of starting work without a confirmed claim.
+
+## Steward works outside Peel
+
+Steward is available as an MIT-licensed project at https://github.com/crunchybananas/steward. Claude Code, Codex, Antigravity, and shell clients can share its local work records, source leases, and build queue. Service profiles also let agents share one frontend or API process and stop it by its recorded job ID.
+
+## Smaller stores, preserved history
+
+Coordination records use an append-only journal with snapshots and retention. Heartbeats no longer rewrite the entire history. RAG blob storage also releases obsolete retention tags, and diagnostics report its size.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.51.0)
+
 ## 2.50.0 - 2026-09-06
 
 PR review never inverts a verdict again. The `actionable-issues-required` gate used to rewrite a REQUEST_CHANGES it could not parse into an APPROVE; measured on tuitionio/tio-api it did that to five reviews in one week, three of them reasoning traces posted as approvals. The parser now reads `## Findings` as well as `## Issues`, skips the formatter's suggestion items, and no gate can lower a verdict: a review with nothing readable, an approval over listed findings, a body with no review structure, or a review whose every finding was struck is withheld and the next patrol pass reviews the head again. A local reviewer that emits no VERDICT line, or a Local Consensus with no CONSENSUS line, escalates to the frontier reviewer instead of reading as agreement.
