@@ -17,6 +17,30 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.52.0 - 2026-09-09
+
+## Pick up where work stopped
+
+Peel restores saved run identities and review state after a restart. Home and Needs You offer clearer recovery actions, with durable model choices carried through resumed work.
+
+## Keep local work on the model you chose
+
+Bound local runs keep their assigned workspace and worker. A stalled implementation gets one chance to continue when it has made no progress. If an explicitly selected reviewer fails or returns unusable output, Peel reports that failure instead of trying another model.
+
+## Retry PR delivery without repeating the agent run
+
+Verified changes can retry pull request delivery from their saved commit. Retries stay responsive and can be cancelled. Repeating the request finds the existing pull request instead of creating a duplicate.
+
+## Give reviews better source context
+
+New files get priority within the review context budget. Placement findings must be grounded in the actual source, reducing false alarms caused by misleading diff headers.
+
+## Preserve more complete recovery snapshots
+
+Snapshots retain the journal data needed to reopen a copied store. Peel also cleans up stale shared memory files when preparing a recovery snapshot.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.52.0)
+
 ## 2.51.0 - 2026-09-08
 
 ## Fleet upgrade order
