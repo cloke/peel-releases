@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.53.0 - 2026-09-10
+
+## Free models can do real chain work
+
+OpenRouter models can now run managed agentic steps through `chains.run`. Pick an enabled free model, give it a bounded tool list, and keep the work in Peel's normal worktree and review flow. Peel checks live pricing before each turn and sends a zero-price limit to OpenRouter. An unavailable model fails visibly instead of switching providers.
+
+## Know where your work went
+
+The Needs You queue opens the GitHub pull request when a run has already delivered one. Local changes still lead to local review. A lost worker status no longer turns an execution problem into a model-quality verdict, and usage remains attached to failed hosted runs when it was reported.
+
+## Give reviewers the missing context
+
+TypeScript PR reviews can include bounded dependency context from the exact reviewed revision. Supported relative imports and project aliases bring nearby definitions into the review without handing the model an unrelated checkout.
+
+OpenRouter setup lives in Settings → Agents. Enable the provider and the exact model you want to use. Task context and requested tool results are sent through OpenRouter under the account's provider data policies. The first chain release supports agentic steps with an explicit tool list; existing CLI and local-model workflows remain available.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.53.0)
+
 ## 2.52.0 - 2026-09-09
 
 ## Pick up where work stopped
