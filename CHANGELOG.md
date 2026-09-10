@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.53.1 - 2026-09-10
+
+Remote cancellation now reaches the machine doing the work. Update both the requesting Mac and its swarm workers to use it.
+
+- Stopping a remote chain closes its active Ollama stream and releases the inference queue after cleanup, so the next request can start.
+- Cancelling queued work leaves the current inference alone. Cancellation stays bound to the original peer, swarm, and request.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.53.1)
+
 ## 2.53.0 - 2026-09-10
 
 ## Free models can do real chain work
