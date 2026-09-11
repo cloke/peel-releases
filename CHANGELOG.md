@@ -17,6 +17,17 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.54.0 - 2026-09-11
+
+Restarting Peel no longer strands disk space in the swarm blob store. Each launch used to leave one RAG overlay per repo pinned, with nothing left that could release it. We now pin each repo's overlay in a named slot, so pinning a newer overlay releases the older one in the same write. Each Mac clears its own stranded pins the first time it launches v2.54.0, and the next garbage collection pass frees the space. On one store that had been growing for three months, those pins held about 4.7 GB.
+
+- Delta bundles built for a single peer are no longer pinned for the whole session. Garbage collection can reclaim them within the hour, and a peer that asks later gets a fresh build.
+- `system.doctor` warns when the blob store holds more than 1 GB with no pinned slot. `swarm.diagnostics` reports pinned slots and how many old pins were retired at launch.
+- An agent can remove exactly the saved runs it names: `runs.cleanup` accepts `runIds`. Each id comes back matched, not found, or ineligible with the reason, and dry run is still the default.
+- Release notes that Peel writes for a large deploy now cover its oldest commits. The writer reads up to 400 commits by default, up from the newest 80. Set `maxCommitsShown` in the release notes configuration to change the limit.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.54.0)
+
 ## 2.53.1 - 2026-09-10
 
 Remote cancellation now reaches the machine doing the work. Update both the requesting Mac and its swarm workers to use it.
