@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.55.1 - 2026-09-12
+
+The Campaign Worker now sees the whole backlog. Its claim asked the plane for the twenty highest-priority opportunities, and on a plane with dozens of higher-priority teammate proposals that window never held a single campaign item, so a scheduled worker idled over a full queue with "nothing claimable". The claim now considers every open opportunity and lets its own campaign filter narrow the set.
+
+- A new read-only tool, `ollama.queue.status`, reports a Mac's inference queue depth, current holder, position for a new caller, per-model residency and memory headroom without running inference, so a pipeline can check readiness before dispatching. Peel's own campaign worker produced this change.
+- A remote `ollama.chat` call no longer times out at the transport before the target can answer `queued`: the default remote timeout now tracks the target's own queue budget instead of a flat thirty seconds.
+- The Inbox's search and filters moved into a full-width header.
+- Which auto-imports a review applies is read from the target repository rather than remembered from an earlier one.
+- The two-swarm leak test suite is in the tree, with every known leak recorded as an expected failure that names the change which will close it.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.55.1)
+
 ## 2.55.0 - 2026-09-12
 
 Scheduled work no longer stops when a checkout sits on the wrong branch. Every scheduled patrol takes a short claim so two Macs never run the same schedule, and that claim used to name whatever branch the checkout happened to be on. When that branch was outside the repository's agent-control policy, the plane refused every claim and the scheduler booked each refusal as a quiet skip, so a Mac's Release Notes, Security Patrol, Morning Briefing, Model Scorecard Refresh and Knowledge Jury could all stop without a single alert. The claim now names a branch the policy allows, and a claim the plane refuses on configuration grounds is booked as a failure: it counts toward the failure streak, shows its reason on the schedule row, escalates like a failed chain, and raises an Inbox observation and a notification.
