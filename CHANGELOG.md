@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.55.2 - 2026-09-12
+
+A Mac now acts only in the swarms it takes part in. Swarm membership belongs to the account, so until now every Mac signed in to it registered, listened, announced and published in every swarm the account owned or joined, and a second swarm would have enrolled every Mac at once. Each Mac keeps its own participation set (seeded once from the swarms it is in today, so nothing changes for an upgrading fleet), `swarm.participation.get` and `swarm.participation.set` read and change it, and leaving a swarm takes that Mac's worker offline there without touching membership.
+
+- Pausing a campaign no longer fails the next Campaign Worker tick: its items are held back with the reason and no attempt is spent, and items of other campaigns are still claimed past it.
+- The agent activity row in the repositories command center renders a peer's structured activity summary ("1 event", "2 observations") instead of going blank for daemons on the new contract. Peel's own campaign worker wrote this change.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.55.2)
+
 ## 2.55.1 - 2026-09-12
 
 The Campaign Worker now sees the whole backlog. Its claim asked the plane for the twenty highest-priority opportunities, and on a plane with dozens of higher-priority teammate proposals that window never held a single campaign item, so a scheduled worker idled over a full queue with "nothing claimable". The claim now considers every open opportunity and lets its own campaign filter narrow the set.
