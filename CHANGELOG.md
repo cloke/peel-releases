@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.55.0 - 2026-09-12
+
+Scheduled work no longer stops when a checkout sits on the wrong branch. Every scheduled patrol takes a short claim so two Macs never run the same schedule, and that claim used to name whatever branch the checkout happened to be on. When that branch was outside the repository's agent-control policy, the plane refused every claim and the scheduler booked each refusal as a quiet skip, so a Mac's Release Notes, Security Patrol, Morning Briefing, Model Scorecard Refresh and Knowledge Jury could all stop without a single alert. The claim now names a branch the policy allows, and a claim the plane refuses on configuration grounds is booked as a failure: it counts toward the failure streak, shows its reason on the schedule row, escalates like a failed chain, and raises an Inbox observation and a notification.
+
+- A new built-in template, Campaign Worker, is the swarm's pull loop. Schedule it on a Mac and each tick claims one item of campaign work on that Mac's checkout; the claim launches the item's own chain, so the worker never occupies a chain slot itself. An idle tick settles as no work, a claim settles as completed with the launched run as its handle, and a claim that could not be made is a failure. Run by hand, the template says so and does nothing.
+- A checkout parked in a detached state, mid-rebase for example, no longer stops its scheduled claims; the claim falls back to the policy's base branch.
+- The `campaign.claim` description, the client quickstart and the Schedules help entry explain how to run the loop.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.55.0)
+
 ## 2.54.0 - 2026-09-11
 
 Restarting Peel no longer strands disk space in the swarm blob store. Each launch used to leave one RAG overlay per repo pinned, with nothing left that could release it. We now pin each repo's overlay in a named slot, so pinning a newer overlay releases the older one in the same write. Each Mac clears its own stranded pins the first time it launches v2.54.0, and the next garbage collection pass frees the space. On one store that had been growing for three months, those pins held about 4.7 GB.
