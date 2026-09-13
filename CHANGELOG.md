@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.57.0 - 2026-09-13
+
+The second half of the Campaign Worker's own work-spine fixes, reviewed and corrected before landing.
+
+- A person can take a queued or blocked item back out of a campaign: `work.dismiss` over MCP, a Dismiss action on Home's campaign card and in the Inbox campaign detail, behind a confirmation that names the objective. A dismissed item is neither done nor needing you, `campaign.status`, `work.status` and `campaign.list` agree on it, and the Box's queued answer now names the objective it waits behind.
+- Tier routing's model is binding on the implementer step: a floor that this machine can run in the step's own model family is applied at dispatch, a bound model stays authoritative and books its own premium, and PR provenance lists each step's model and flags a real mismatch.
+- A run's verification build is followed by the repository's CI gates (`verify.gates` in `.peel/config.json`) inside the worktree, with one bare-implementer fix-up turn when a gate is red; a fix-up can never overturn a rejected review, gates run against the run's own base revision under a timeout, and a red gate ends the run without a pull request.
+- The review loop never starts a PR Review Patrol on the device that authored the pull request; it defers to a device that owns a pinned patrol schedule for the repository, says plainly what that patrol needs before it will review, and `campaign.status` carries the outcome.
+- The campaign keeper tells harness failures from model failures by a typed origin the runner records (staging, tree measurement, an unavailable build steward, a gate that could not run, delivery), refunds the attempt without changing the tier, and still retires an item whose harness keeps failing.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.57.0)
+
 ## 2.56.0 - 2026-09-13
 
 Peel's own Campaign Worker wrote the changes in this release: it drained its queue of ten work-spine issues into pull requests unattended, and the five that cleared review land here.
