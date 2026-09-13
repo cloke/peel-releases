@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.56.0 - 2026-09-13
+
+Peel's own Campaign Worker wrote the changes in this release: it drained its queue of ten work-spine issues into pull requests unattended, and the five that cleared review land here.
+
+- A run whose verification build the steward cannot run now says so by name on the execution, for every way the steward can fail (cannot start, no answer at submit, stopped answering mid-job), and a build gate that could not run because no coordinator is wired records a visible note instead of passing silently.
+- A failed execution reports honest diff stats: a run that rewrote its own history (a rebase-first retry) is measured over its base instead of failing at finalization, a measured zero says "No files committed since <sha>", and the post-merge measurement no longer counts the base branch's drift as the run's work.
+- A run that delivered a pull request completes instead of parking in awaiting-review; the Inbox row reads "PR #N opened" and its one action opens that PR, while a run still holding a local gate keeps its own decision.
+- `work.status` for a run in awaiting-review names the exact `parallel.approve` and `parallel.reject` calls with the ids they accept, and hands back both run ids under their own names.
+- `ui.window.frame` reads a Peel window's frame without changing it (no foreground needed), `ui.snapshot` reports the effective appearance, and the client quickstart names the window presets' sizes.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.56.0)
+
 ## 2.55.2 - 2026-09-12
 
 A Mac now acts only in the swarms it takes part in. Swarm membership belongs to the account, so until now every Mac signed in to it registered, listened, announced and published in every swarm the account owned or joined, and a second swarm would have enrolled every Mac at once. Each Mac keeps its own participation set (seeded once from the swarms it is in today, so nothing changes for an upgrading fleet), `swarm.participation.get` and `swarm.participation.set` read and change it, and leaving a swarm takes that Mac's worker offline there without touching membership.
