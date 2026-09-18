@@ -17,6 +17,25 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.58.0 - 2026-09-18
+
+Two swarms, a cleaner Inbox, and the repository cleanup that landed the work sitting on stale branches.
+
+- Each Mac and each repository now choose the swarms they take part in, and what a swarm supplies stays in that swarm: RAG overlays are served only to the swarm that shared them, and knowledge carries the swarm it was learned in and never crosses to another.
+- Persistent sentinel agents run over the same remote tool path as every other cross-machine call, so a sentinel on one Mac can be addressed from another without a second transport.
+- The Inbox names runs by the work they did, opens a campaign's pull request directly, keeps its filters coherent, and says why a campaign stopped; closed issues retire their campaign items without hiding genuine failures; cancelled work keeps the operator's intent.
+- PR review patrols are lane-aware: security, product fit, scope and runtime validation are separate contracts, so model prompts and routing can be measured by question instead of one generic score.
+- Welcome can be revisited, onboarding's code-search setup says what it really does, and About Peel shows clear product and build details.
+- Schedule yield (what a patrol produced) is read off the main thread: the app no longer walks up to 500 run rows per schedule on the UI thread every evaluation cycle.
+- A peer that restarts and dials back in is held as a candidate until its first channel tag proves the connection, then swapped in and the stale session closed; healthy restarts are no longer rejected until the accept limiter fires.
+- MCP `ui.navigate` reopens the main window first when Peel runs headless or its last window was closed, so navigation no longer silently no-ops.
+- Run cleanup refuses a mistyped or null `runIds`, names every id it could not find, and never removes a protected History row as another row's collateral.
+- The Box's hints mention Shift-Return for a newline; the Swarm Ledger renders a daemon's structured activity ("2 events") the same way the Agents Directory does.
+- Tooling: informational `xcodebuild` calls are pinned to the shared package cache instead of cloning 2.3 GB per checkout; old release directories are pruned after a successful publish (keeping the newest three); the built-in template catalog test knows about the Campaign Worker.
+- Docs: the dependency-graph guide's follow-ups no longer point at a closed issue; the Firestore SDK plan records its true state.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.58.0)
+
 ## 2.57.0 - 2026-09-13
 
 The second half of the Campaign Worker's own work-spine fixes, reviewed and corrected before landing.
