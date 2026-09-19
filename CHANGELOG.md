@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.59.1 - 2026-09-19
+
+A finished PR review now posts.
+
+- v2.59.0 taught the PR review patrol to stop waiting for a Copilot review nobody had requested, but only where it picks a pull request. A second copy of the same rule at posting time went on waiting, so the patrol could run a complete review and then refuse to post it. The step that picks the pull request is now the single authority on that decision: it states it in its own output, and posting trusts that statement instead of asking again.
+- The statement is read only from that step's own header. Text inside a diff, or echoed by a model, cannot turn the rule off.
+- An ad-hoc agent review, with no such step behind it, still waits for Copilot as before.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.59.1)
+
 ## 2.59.0 - 2026-09-19
 
 PR review patrols that stay alive, and review verdicts that are never invented.
