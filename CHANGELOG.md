@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.59.0 - 2026-09-19
+
+PR review patrols that stay alive, and review verdicts that are never invented.
+
+- The PR review patrol no longer goes silent when CI cannot run. A check that GitHub concluded without ever starting (no runner assigned, no step executed) used to read as a failed check, so every pull request was skipped and the patrol reported nothing to do. Those pull requests are now reviewed, and the review says plainly that CI did not run. A check that ran and failed still blocks, and the merge queue and pull request list still show an unverified commit as red.
+- The patrol no longer waits forever for a Copilot review nobody requested. It still waits while a Copilot review is pending or the latest commit is under an hour old. When no review exists, none is requested and auto-request is off, it reviews on its own and says why. It never requests a Copilot review by itself.
+- Every pull request the patrol skips for CI now prints the reason, so a patrol with nothing to do can be told apart from a patrol that is stuck.
+- A review verdict is never assumed. Reviewer output that states no verdict is now recorded as having no verdict, where it used to be recorded as an approval; "incorrect" no longer reads as approval because it contains "correct"; a declared `VERDICT:` line always outranks the prose around it; and "NOT APPROVED" is read as a refusal.
+- A local reviewer that was asked for a verdict and gave none is escalated to the frontier reviewer, as documented. This escalation existed but could never fire. Steps that are never asked for a verdict, such as the security risk judge and deterministic gates, are not held to one.
+- `github.pr.checks` reports `not_run` as its own status, with the count of checks that never started.
+- `swarm.dispatch.tool` waits as long as Peel's own remote inference does when the dispatched tool is an inference turn, and keeps its short default for quick lookups. A slow generation is no longer cut off at sixty seconds while the model is still writing.
+- Security Patrol writes its default mission under `tmp/` and leaves the checkout clean, and a refusal caused by a dirty checkout names the paths.
+- Review gates resolve template built-ins from the repository being reviewed, and say so when they cannot.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.59.0)
+
 ## 2.58.0 - 2026-09-18
 
 Two swarms, a cleaner Inbox, and the repository cleanup that landed the work sitting on stale branches.
