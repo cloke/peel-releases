@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.59.2 - 2026-09-19
+
+Review gates read real file names, and stop mistaking evidence for invention.
+
+- A review that cited `Type+Extension.swift`, or a path with a space in it such as `Tests macOS/…`, could be rejected as "commenting on files not present in the pull request". The check that reads file names out of a review stopped at the `+` or the space and then failed to find the fragment. It now keeps `+` and `@`, and recognizes a fragment left behind by a character it cannot keep, without ever matching a different file (`Net.swift` is still not `SwarmNet.swift`). The same correction applies to the check that decides whether a local review is ungrounded and must escalate.
+- A reviewer that verifies a claim by opening a file the pull request never touched is no longer treated as having made the file up. A citation is struck as fabricated only when the file exists nowhere in the repository. When the repository's file list cannot be read, only the pull request's own files count, as before.
+- The separate safeguard against a review that describes a different pull request is unchanged: it still judges by the pull request's own files, because a review of some other change cites real files too.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.59.2)
+
 ## 2.59.1 - 2026-09-19
 
 A finished PR review now posts.
