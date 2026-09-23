@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.63.0 - 2026-09-23
+
+This release puts Luna to work on the PR patrol, and stops the patrol from asking Ember authors to import built-ins.
+
+**The OpenAI reviewer reviews with its tools.** OpenAI serves a reasoning model with tools only through its Responses API, and the reviewer used the older API, so Luna stepped aside on every review. The reviewer now uses the Responses API. It reads the pull request's code with its read-only tools and posts its review. Nothing is stored at OpenAI: each turn's reasoning comes back encrypted and is sent back with the tools it called. (#2675)
+
+**No more "import `on`" reviews on Ember projects.** Reviewers kept telling authors to import `on`, `fn` and `eq` in template-tag files, which recent Ember versions provide on their own. Every reviewer now follows one rule: a missing-import claim about a template helper must point to a file in the repository that imports it, or to the change that removed the import. The review gates also now recognize the wording these claims use, so an unfounded one is struck before it posts. Peel's bundled Ember skills no longer tell agents to add those imports. Macs that already installed the Ember skill pack keep the old text until the pack is updated. (#2677)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.63.0)
+
 ## 2.62.0 - 2026-09-23
 
 This release gets the PR patrol posting reviews again.
