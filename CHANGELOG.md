@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.60.0 - 2026-09-23
+
+Local models got most of the attention in this release.
+
+**Local models stop running away.** Peel no longer caps how much a local model may write. It watches the stream instead: a model that starts repeating itself or circling in its reasoning is cut, the reply says so, and that model's effort for the task drops for a week so its next send goes better. (#2665)
+
+**A model you just pulled gets the right budget.** A model pulled while Ollama was running used to be sized by its name until Peel restarted, so a reasoning model like MiMo-V2.6 got an 8K window that its thinking filled before any answer began. Peel now checks an unknown model before planning the send. (#2664)
+
+**The Datadog Error Patrol works with qwen3-coder again.** Tool calls travel to Ollama as structure rather than as text the model could copy back, and a call the model garbles is repaired when it can be. (#2663)
+
+**OpenRouter chains run on the new shared agent loop.** A tool call the model gets wrong now goes back to it as an error it can fix instead of ending the step, and hosted models are no longer held to 8,192 output tokens. (#2666)
+
+We also fixed two smaller things. `models.pull` reports the name Ollama actually lists a pull under (#2660), and the PR patrol remembers a review it withheld, so it stops re-reviewing the same commit (#2659).
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.60.0)
+
 ## 2.59.2 - 2026-09-19
 
 Review gates read real file names, and stop mistaking evidence for invention.
