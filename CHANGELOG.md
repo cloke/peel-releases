@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.61.0 - 2026-09-23
+
+This release puts an OpenAI reviewer on every PR patrol and starts Peel's new model judging suite.
+
+**An always-on OpenAI reviewer.** The PR Review Patrol now ends with an OpenAI reviewer on every review. It reads the pull request's code with read-only tools, sees what the local reviewers found, and its review is the one posted. It runs Luna by default, or the model you choose in Settings → Agents → OpenAI from the models your key can use. If the reviewer can't run (no key, no model, the monthly limit reached, or an OpenAI error), it steps aside with a short note and the review posts from the other reviewers as before. (#2670, #2671)
+
+**A monthly limit for OpenAI spend.** Settings → Agents → OpenAI has a monthly dollar limit with this Mac's spend so far, and the price that turns tokens into dollars, which Look up fills in from OpenRouter's listing of the same model. (#2670)
+
+**One key for all your Macs.** Paste your OpenAI key once, then copy it keychain to keychain to another of your Macs over the swarm's encrypted link, along with your review model, monthly limit and price. Only your own verified Macs can receive it, and Settings shows which Mac set a key and when. OpenRouter and OpenAI keys now share one keychain store, and existing OpenRouter keys carry over. (#2669, #2670, #2671)
+
+**A tool-use suite in the model scorecard.** Models are now ranked on finding facts in a repository with tools, twelve questions about a small synthetic codebase no model has seen, graded by code. Each scorecard task now keeps its own revision, so new suites never invalidate existing numbers. (#2668)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.61.0)
+
 ## 2.60.0 - 2026-09-23
 
 Local models got most of the attention in this release.
