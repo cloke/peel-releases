@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.62.0 - 2026-09-23
+
+This release gets the PR patrol posting reviews again.
+
+**Patrols post again when the OpenAI reviewer steps aside.** In 2.61.0, when the OpenAI reviewer couldn't run, the patrol read its short note as a reviewer that gave no verdict and failed the whole run, so no review was posted. Now a hosted reviewer that steps aside, or answers without a verdict, is left out of the posted review, and the review posts from the other reviewers as intended. (#2672)
+
+**Tools OpenAI accepts.** OpenAI refused every request from the OpenAI reviewer, because a few of Peel's tools describe their arguments in ways OpenAI does not take: alternatives at the top of the parameters, and one description over 1,024 characters. Peel now reshapes tools for hosted models before sending them. When OpenAI does refuse a request, the reviewer's note names the parameter OpenAI objected to. (#2673)
+
+**Luna still steps aside in this release.** OpenAI serves reasoning models with tools only through its newer Responses API, and the reviewer still uses the older one. The next release moves it over. Until then the local reviewers carry every review.
+
+**Settings says what an unset review model does.** With no model chosen, the OpenAI reviewer runs Luna, and the picker and its caption now say so. (#2672)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.62.0)
+
 ## 2.61.0 - 2026-09-23
 
 This release puts an OpenAI reviewer on every PR patrol and starts Peel's new model judging suite.
