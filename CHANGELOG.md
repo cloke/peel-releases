@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.65.0 - 2026-09-24
+
+This release stops a workspace nobody pulls from feeding stale rules to the PR patrol.
+
+**Patrols read the team's current guidance.** Peel fetches a followed workspace on a schedule but never moves its branch, which is where you work. A workspace nobody pulled could sit far behind for weeks while Peel reported every sync as fine, and every patrol prompt started with that checkout's old `.peel` directives. After each fetch, Peel now copies the upstream version of the workspace's directives and mission into its own storage, and chains read that copy. Your checkout is never touched. (#2682)
+
+**See when a workspace falls behind.** Followed Workspaces now shows how many commits a workspace is behind its upstream, and how many local commits it has that were never pushed, and `swarm.workspace.list` reports the same. (#2682)
+
+**No new model names in code.** A new check stops any change that adds a model name to Peel's code or templates. It's the first step toward choosing every model as data instead of in code. (#2681)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.65.0)
+
 ## 2.64.0 - 2026-09-24
 
 This release shows what the OpenAI reviewer costs, review by review.
