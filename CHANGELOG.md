@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.66.0 - 2026-09-24
+
+This release gives the PR patrol a review ladder, and makes models something you choose rather than something built into Peel.
+
+**A review ladder.** The OpenAI reviewer still reviews every pull request, and now ends each review by saying whether it should go further. When a change is security-sensitive, or too large to review well in one pass, a second, deeper review runs on the model you choose as the escalation model in Settings → Agents → OpenAI. If no escalation model is set, that step steps aside and the first review posts as before. The Claude command-line review step has left the patrol, and the review footer says why a pull request escalated. (#2685)
+
+**Models are data, not code.** The local models Peel knows by default, and which job each does, now live in a data file instead of the app's code, and a new `models.roles` tool shows which model does each job on a Mac and where that choice came from. (#2683)
+
+**Your Macs see each other's repositories.** Your own verified Macs can now work with every repository on each other, for example to refresh one Mac's search index from another. Other people's Macs keep their limits. (#2684)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.66.0)
+
 ## 2.65.0 - 2026-09-24
 
 This release stops a workspace nobody pulls from feeding stale rules to the PR patrol.
