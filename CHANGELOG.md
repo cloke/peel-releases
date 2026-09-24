@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.64.0 - 2026-09-24
+
+This release shows what the OpenAI reviewer costs, review by review.
+
+**Spend you can see.** Every OpenAI review now records its tokens and its cost, and Settings → Agents → OpenAI shows this Mac's spend for the month. OpenAI reports tokens, not dollars, so Peel prices them at the model's current list price from OpenRouter's catalog, including the lower rate for input served from OpenAI's cache. No price is built into the app, so a new model is priced the day it is listed. A price you enter in Settings still overrides the list. (#2679)
+
+**Change the review model without Settings.** The review model, the monthly limit and the price override can now be read and changed from another of your own Macs, and copying a key to a Mac that already has it no longer rewrites the keychain. (#2679)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.64.0)
+
 ## 2.63.0 - 2026-09-23
 
 This release puts Luna to work on the PR patrol, and stops the patrol from asking Ember authors to import built-ins.
