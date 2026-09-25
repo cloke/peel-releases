@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.67.0 - 2026-09-25
+
+This release keeps the PR patrol reviewing when a pull request is very large, and lets an agent review a pull request in Peel.
+
+**Large pull requests no longer stall a repository.** GitHub refuses to serve a diff over 20,000 lines. The patrol used to fail on such a pull request, remember nothing, and pick the same one again every cycle, so the repository got no reviews at all. Peel now takes the same commits from git when GitHub won't serve the diff, and a pull request whose scope the patrol refuses is remembered so it can't be picked again and again. (#2686)
+
+**Agents can review a pull request in Peel.** The pull request detail's Approve, Request Changes, Comment, and Merge are now available to an agent driving Peel, enabled and disabled for the same reasons a person sees. And when Approve is unavailable, the detail says why: you already approved, or it's your own pull request. (#2686)
+
+**Smaller fixes.** A remote run's "Requested work" in the Inbox shows the request itself rather than the repository guidance Peel adds to every run. Indexing a repository by its identifier works on any Mac that has a checkout of it. (#2686)
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.67.0)
+
 ## 2.66.0 - 2026-09-24
 
 This release gives the PR patrol a review ladder, and makes models something you choose rather than something built into Peel.
