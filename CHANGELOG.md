@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.68.0 - 2026-09-25
+
+## Better code search on every Mac in a swarm
+
+- **Consumer Macs now converge on their producer's analysis.** A Mac that pulls a repository's index from a peer used to keep old summaries whenever its checkout sat at a different commit, because overlay chunks matched only on exact line ranges. Chunks now also match on their content, a Mac with a large analysis gap asks for the whole overlay (at most every 12 hours), and a re-analysis on the producer reaches consumers on their next pull.
+- **Sharper chunk summaries.** The analyzer now sees each chunk's file path, asks for summaries that name the real identifiers, and no longer guesses at abbreviations. Replies use structured output, so malformed text no longer lands in the index as a summary.
+- **Summaries survive long chunks.** Enriched embeddings put the summary before the code, so embedders that cut long input no longer drop it.
+- **No more "[analysis-failed]" in results.** A failed analysis is recorded as missing and retried, instead of being stored and served as the summary.
+- **Search collapses translated copies.** When several locales of the same translation file match a query, results keep the best-ranked one, which leaves room for code. Name a locale in the query to keep its copy.
+- **Overlay results show clean tags.**
+
+## Knowledge
+
+- Republishing content the jury already retired is refused, so updating a skill pack no longer brings back retired guidance.
+- Compaction keeps the copy of a duplicate that recall can actually serve.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.68.0)
+
 ## 2.67.0 - 2026-09-25
 
 This release keeps the PR patrol reviewing when a pull request is very large, and lets an agent review a pull request in Peel.
