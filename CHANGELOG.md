@@ -17,6 +17,13 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.69.0 - 2026-09-25
+
+### PR review patrol
+- A hosted reviewer that writes "None confirmed." or "None found in the diff." under `## Issues` and approves now posts its approval. The poster read those lines as findings and withheld the review as an approval over findings; the first Sol escalation review on 2.67.0 was discarded that way and re-run at full cost. "None of the callers check x" is still a finding.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.69.0)
+
 ## 2.68.0 - 2026-09-25
 
 ## Better code search on every Mac in a swarm
