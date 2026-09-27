@@ -17,6 +17,14 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.72.0 - 2026-09-27
+
+- Local model conversations preserve your original request when tool results grow large. Peel shares the available space across long results while keeping native calls and images intact.
+- Requests account for the model’s completion budget before inference. If essential instructions cannot fit, Peel reports the limit before sending the request.
+- Native model diagnostics now report context estimates and request size, making it easier to investigate incomplete answers and compare local workflows.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.72.0)
+
 ## 2.71.0 - 2026-09-27
 
 ## Local models can use the tools they need
