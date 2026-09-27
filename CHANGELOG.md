@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.71.0 - 2026-09-27
+
+## Local models can use the tools they need
+
+Peer-backed workflows now keep native tool calls and their results together across a conversation. A model pinned to Bender stays on Bender, with failures and usage recorded for review.
+
+## Saved workflows keep their settings
+
+Saved JSON and YAML workflows retain the selected model, worker, tools, and task policy. Starting a workflow from the app uses the configured runner.
+
+## Investigations get a clearer task
+
+Read-only investigations now ask for answers grounded in source evidence. They no longer inherit the planner requirement to produce a code-change plan.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.71.0)
+
 ## 2.70.0 - 2026-09-27
 
 ## Clearer local-model evaluations
