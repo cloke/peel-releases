@@ -17,6 +17,22 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.70.0 - 2026-09-27
+
+## Clearer local-model evaluations
+
+Local-model tool checks preserve the complete sequence of calls and results, including multiple calls in one response. Evaluations stay bound to the selected model and worker, and their results remain separate from historical scorecards.
+
+## Evidence you can inspect
+
+Evaluation traces show which model answered and separate queue time from backend timing when those measurements are available. Interrupted or unavailable requests retain their evidence without being graded as poor model answers. Checks for missing files now accept a complete listing of the pinned repository snapshot.
+
+## More complete repository knowledge
+
+Knowledge recall includes every indexed Markdown guide. Peers with incomplete repository indexes can request a full copy instead of continuing from an incomplete view.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.70.0)
+
 ## 2.69.0 - 2026-09-25
 
 ### PR review patrol
