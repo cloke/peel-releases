@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.73.0 - 2026-09-27
+
+# Keep the thread
+
+Update the coordinating Mac and its local-model workers together. This release introduces a new native tool-turn protocol; older workers must update before taking these jobs.
+
+- Local models keep their thinking state between tool calls, so an investigation can continue from the evidence it just gathered.
+- Native runs keep answer text separate from thinking and report incomplete responses explicitly. An empty answer gets one bounded follow-up.
+- Managed runs retain per-turn completion and timing receipts after a restart. The receipts contain counts and timings, without storing the model's private thinking.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.73.0)
+
 ## 2.72.0 - 2026-09-27
 
 - Local model conversations preserve your original request when tool results grow large. Peel shares the available space across long results while keeping native calls and images intact.
