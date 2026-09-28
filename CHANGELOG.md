@@ -17,6 +17,18 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.75.0 - 2026-09-28
+
+## JSON output for local review workflows
+
+- Ask Ollama for JSON output in native review turns that do not use tools.
+- See the requested output format in each backend-attempt receipt, including thinking-compatibility retries.
+- Catch incompatible output options before the request enters the inference queue.
+
+Existing requests keep their current behavior. Review workflows still validate the answer and its evidence.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.75.0)
+
 ## 2.74.0 - 2026-09-28
 
 Local investigations keep their place.
