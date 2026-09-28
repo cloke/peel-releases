@@ -17,6 +17,16 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.74.0 - 2026-09-28
+
+Local investigations keep their place.
+
+- Source reads can select line ranges or find a literal phrase. Local model investigations receive smaller, resumable windows into long files.
+- Native peer investigations retain their gathered evidence when a busy worker explicitly declines the next turn before generation starts. Waiting is bounded and can be cancelled.
+- Turn diagnostics separate queue admission from later generation failures, so busy hardware and unfinished model answers are easier to tell apart.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.74.0)
+
 ## 2.73.0 - 2026-09-27
 
 # Keep the thread
