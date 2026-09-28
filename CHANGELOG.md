@@ -17,6 +17,28 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.76.0 - 2026-09-28
+
+## Home keeps its numbers
+
+- Four numbers sit under Home's header again: repositories and how many are cloned on this Mac, runs in progress and how many are waiting on you or failed, workers online and how many are busy, and unreviewed knowledge with how many entries are contested. Click a number to open the view that explains it.
+- Open pull requests are counted by the status each one's Inbox row shows, failures first.
+- Click anywhere on a Needs You row, a pull request row, or a campaign card to open it. Secondary actions, such as opening a pull request on GitHub, are in the row's context menu.
+
+## A simpler pull request page
+
+- One header and one decision card hold every review action.
+- Overview, Files and Conversation tabs, each with its count. The tabs stay in reach while a long tab scrolls.
+- Descriptions and reviews render tables and hide HTML comments, as GitHub does.
+
+## Campaign results whose pull request already merged
+
+- A result whose pull request has merged now reads "Accept merged PR #N" on Home and in the Inbox, and its decision opens on Accept and Reject, with the pull request one click away. Peel reads each pull request's state when it refreshes campaigns, not on every redraw, and never shows an unknown state as merged.
+
+Agents driving Peel over MCP get matching controls: `home.stats.<name>.open` for each number, and `repositories.pr.back` and `repositories.pr.context` for the pull request bar.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.76.0)
+
 ## 2.75.0 - 2026-09-28
 
 ## JSON output for local review workflows
