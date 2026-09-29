@@ -17,6 +17,25 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.77.0 - 2026-09-29
+
+## Evidence-adjudicated PR reviews
+
+- New built-in "Evidence PR Review" chain: a host gate fetches the PR's complete immutable diff as evidence, a local detector proposes candidates, the configured OpenAI review model adjudicates every candidate, and the verdict is derived mechanically. The review posts only against the exact reviewed commit and is withheld if the PR's base, head or file set changed.
+- Internal COMMENT is now a real recommendation for nonblocking observations and carries no verdict label. Automated APPROVE requires an explicit empty findings section; contradictory or malformed reviewer output is withheld, never rewritten.
+- Auto-merge submits its actual evaluated review and stops before merging when posting is withheld.
+- Stale-label cleanup failures are reported as warnings on an already posted review instead of retrying the review.
+
+## Swarm
+
+- Direct-command replies larger than the control frame are delivered in full, and a reply that cannot be sent answers with a clear error instead of silence.
+
+## Docs
+
+- Documentation and the changelog spin no longer name GitHub tools Peel does not have.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.77.0)
+
 ## 2.76.0 - 2026-09-28
 
 ## Home keeps its numbers
