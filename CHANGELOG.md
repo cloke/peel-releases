@@ -17,6 +17,24 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.78.0 - 2026-09-29
+
+## What is running right now
+
+- The toolbar pill names the agent work in flight on this Mac and on every peer present in the swarm, including chains that never become an Inbox run. Click it to see each run as a row and open that run's own detail.
+
+## Keychain
+
+- Peel's keychain items now live in the data-protection keychain, admitted by Peel's access group rather than per-item permissions, so a differently signed build reads them without a prompt and a broken login keychain cannot take the swarm down. Older items are read once from the login keychain and copied forward; the login copy is never deleted, so the NodeID does not change.
+
+## Builds and tooling
+
+- Cold Rust FFI builds compile again on macOS 27: the deployment floor now applies only to target crates, never to the proc-macros rustc must load.
+- The iroh FFI build shares one cargo target directory per repository, so a new worktree no longer pays a full cold compile, and the artifact cache prunes entries nothing references.
+- Four help entries re-verified against the code they describe, and the Templates entry now names the Evidence PR Review workflow.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.78.0)
+
 ## 2.77.0 - 2026-09-29
 
 ## Evidence-adjudicated PR reviews
