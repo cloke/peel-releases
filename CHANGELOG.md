@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.79.0 - 2026-09-30
+
+## Evidence PR review
+
+- An empty local detector inventory no longer approves a pull request on its own. The configured hosted review model re-detects over the same complete diff evidence under the same strict contract; only a hosted empty inventory permits the judge to be skipped, hosted candidates are adjudicated like any others, and a failed or malformed hosted pass withholds the review. The hosted pass is audited and attributed on the review even when the judge is skipped.
+- The workflow now accepts the six pull-request keys every dispatcher injects and a same-host placement authorization, so it can be started through chains.run. A study variant, "Evidence PR Review (Study)", reviews a closed or merged pull request in shadow mode for held-out studies and never posts.
+
+## Release notes
+
+- The release-notes writer model is configuration rather than a literal, a catch-up cap clears instead of stalling, and one publisher owns the post.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.79.0)
+
 ## 2.78.0 - 2026-09-29
 
 ## What is running right now
