@@ -17,6 +17,19 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.80.0 - 2026-09-30
+
+## Evidence PR review
+
+- The local detector waits for the GPU queue instead of giving up when another run is loading a model, and its output contract states the exact keys so a stray field cannot withhold a review.
+
+## Operator visibility
+
+- A signed-out CLI is put in front of the operator on every Mac they own.
+- A gate that finds no work ends the run on every execution path.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.80.0)
+
 ## 2.79.0 - 2026-09-30
 
 ## Evidence PR review
