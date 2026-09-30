@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.83.0 - 2026-09-30
+
+## Evidence PR review
+
+- Fixed: the Evidence PR Patrol's dispatched reviews were refused at the review gate in 2.82.0, on scheduled ticks and on `review.evidence.next` alike. A dispatch now names the Mac it runs on, which the gate accepts.
+- Every hosted evidence turn is decoded under a JSON Schema for its contract, so a reply can no longer fail on a stray bracket, an extra key or a miscopied digest. The strict decoders and the validator still run on every reply.
+- New study template "Evidence PR Review (Study, source reads)": after detection, one turn names source outside the diff, the host reads it from git at the reviewed commits, and a second detection turn looks at the diff beside it. Always shadow. Production does not use it.
+
+## Review posting
+
+- A findings section that opens "None, except …" or "No issues, but …" is now read as a finding. It used to close the section and erase the finding under it.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.83.0)
+
 ## 2.82.0 - 2026-09-30
 
 ## Evidence PR review
