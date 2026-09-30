@@ -17,6 +17,15 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.81.0 - 2026-09-30
+
+## Evidence PR review
+
+- Reasoning effort is now a setting for every native OpenAI review turn (`providers.openai.settings reviewReasoningEffort`), travels with the key, and is recorded on each receipt.
+- A second study template, "Evidence PR Review (Study, hosted detector)", lets the configured OpenAI model detect as well as judge over a closed pull request, with no local model, always in shadow.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.81.0)
+
 ## 2.80.0 - 2026-09-30
 
 ## Evidence PR review
