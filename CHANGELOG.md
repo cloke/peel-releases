@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.85.0 - 2026-09-30
+
+## GitHub App identity
+
+- Agent traffic on a repository now uses the App installation that covers that repository, looked up from the repository itself, instead of the one installation saved with the configuration. A GitHub App is installed per account, and a token from another account's installation is refused by GitHub.
+- A repository the App is not installed on is refused by name, and nothing is posted: the message says which account to install the App on. Previously the post either failed with a bare 404 or landed under the operator's personal account.
+- `github.app.status` takes `owner` and `repo` and reports whether the App is installed on that repository and which installation covers it.
+
+## Swarm ledger
+
+- A ledger migration that was interrupted between creating the section directory and writing its last section no longer masks the full ledger file beside it. Migrations now write to a scratch directory, verify it, and rename it into place; a monolith found beside sections is merged in and archived.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.85.0)
+
 ## 2.84.0 - 2026-09-30
 
 ## Evidence PR review
