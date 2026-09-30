@@ -17,6 +17,21 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.82.0 - 2026-09-30
+
+## Evidence PR review
+
+- The production "Evidence PR Review" now detects with the configured OpenAI review model and judges in a separate turn. No local model runs. The local detector stays available in "Evidence PR Review (Study)", which never posts.
+- New schedule templates "Evidence PR Patrol" and "Evidence PR Patrol (Shadow)". Each tick lists the repository's open pull requests and dispatches one evidence review for the most recently updated head that has none. A head is reviewed once and retried once if its review was withheld. The shadow patrol records without posting. The minimum interval is one minute, and an idle tick is one GitHub list call.
+- `review.evidence.next` runs one patrol tick by hand. With `dryRun` it reports how every open pull request stands without dispatching.
+- Every evidence verdict still posts as a review comment with a label. Nothing here can approve a pull request.
+
+## Fixes
+
+- A hosted detection turn's tokens are no longer counted twice on the judge result.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.82.0)
+
 ## 2.81.0 - 2026-09-30
 
 ## Evidence PR review
