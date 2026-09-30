@@ -17,6 +17,20 @@ Each entry links to its full release notes.
 - Added `scripts/publish-page.sh`, which rebuilds `gh-pages` from `docs/` and refuses to publish
   if the content fails a denylist and OCR check.
 
+## 2.84.0 - 2026-09-30
+
+## Evidence PR review
+
+- The review takes diffs up to 256 KiB. The old 96 KiB bound was sized for a local model and left about a quarter of open pull requests unreviewable.
+- New setting `confirmEmptyReviews` (`providers.openai.settings`), off by default: when the review model finds nothing, the escalation model also detects before the review approves. One escalation-model turn per such pull request.
+- New study template "Evidence PR Review (Study, escalation confirmation)" for measuring that in shadow.
+
+## Schedules
+
+- A schedule on an interval shorter than five minutes now runs at that interval. An internal guard had been holding every schedule for five minutes after it fired, so the Evidence PR Patrol and the Campaign Worker ticked every five minutes whatever their interval.
+
+[Release notes](https://github.com/cloke/peel-releases/releases/tag/v2.84.0)
+
 ## 2.83.0 - 2026-09-30
 
 ## Evidence PR review
